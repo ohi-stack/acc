@@ -1,38 +1,91 @@
-import { createServer } from 'http';
-import { createApp } from './app';
-import { env } from './config/env';
-import { logger } from './utils/logger';
-import { runMigrations } from './db/migrate';
-import { redis } from './db/redis';
-import { pgPool } from './db/postgres';
-import { SchedulerService } from './scheduler/scheduler.service';
+import dotenv from "dotenv";
+import express from "express";
+import { createAgentRoutes } from "./api/agents.routes";
+import { createTaskRoutes } from "./api/tasks.routes";
+import { createWorkflowRoutes } from "./api/workflows.routes";
+import { AgentManager } from "./core/AgentManager";
+import { TaskQueue } from "./core/TaskQueue";
+import { WorkflowRegistry } from "./core/WorkflowRegistry";
+import { apiKeyAuth } from "./middleware/auth";
+import { basicRateLimit } from "./middleware/rateLimit";
+import { DatabaseService } from "./services/DatabaseService";
+import { RedisService } from "./services/RedisService";
 
-async function bootstrap() {
-  await runMigrations();
+dotenv.config();
 
-  const app = createApp();
-  const server = createServer(app);
-  const scheduler = new SchedulerService();
+async function bootstrap(): Promise<void> {
+  const app = express();
+  const port = Number(process.env.PORT ?? 4000);
+  const databaseUrl = process.env.DATABASE_URL ?? "postgres://postgres:postgres@localhost:5432/acc";
+  const redisUrl = process.env.REDIS_URL ?? "redis://localhost:6379";
 
-  server.listen(env.PORT, () => {
-    scheduler.start();
-    logger.info({ port: env.PORT }, 'ACC service started');
+  const redisService = new RedisService(redisUrl);
+  const databaseService = new DatabaseService(databaseUrl);
+
+  try {
+    await databaseService.connect();
+  } catch (error) {
+    console.warn("Database connection failed during startup.", error);
+  }
+
+  const agentManager = new AgentManager();
+  const taskQueue = new TaskQueue(redisService);
+  const workflowRegistry = new WorkflowRegistry();
+
+  app.use(express.json());
+  app.use(basicRateLimit);
+  app.use(apiKeyAuth);
+
+  app.get("/", (_req, res) => {
+    res.json({
+      service: "ACC — Agent Command Console",
+      status: "running",
+      version: "1.0.0"
+    });
   });
 
-  const shutdown = async (signal: string) => {
-    logger.info({ signal }, 'Shutting down ACC');
-    scheduler.stop();
-    server.close(async () => {
-      await Promise.allSettled([redis.quit(), pgPool.end()]);
-      process.exit(0);
-    });
-  };
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok" });
+  });
 
-  process.on('SIGINT', () => void shutdown('SIGINT'));
-  process.on('SIGTERM', () => void shutdown('SIGTERM'));
+  app.get("/ready", async (_req, res) => {
+    const checks: Record<string, string> = {
+      app: "ready",
+      redis: "unknown",
+      postgres: "unknown"
+    };
+
+    let ok = true;
+
+    try {
+      const pong = await redisService.ping();
+      checks.redis = pong === "PONG" ? "ready" : "degraded";
+    } catch {
+      ok = false;
+      checks.redis = "down";
+    }
+
+    try {
+      await databaseService.ping();
+      checks.postgres = "ready";
+    } catch {
+      ok = false;
+      checks.postgres = "down";
+    }
+
+    res.status(ok ? 200 : 503).json({ status: ok ? "ready" : "degraded", checks });
+  });
+
+  app.use("/agents", createAgentRoutes(agentManager));
+  app.use("/tasks", createTaskRoutes(taskQueue));
+  app.use("/workflows", createWorkflowRoutes(workflowRegistry));
+
+  app.listen(port, () => {
+    console.log(`ACC running on port ${port}`);
+  });
 }
 
 bootstrap().catch((error) => {
-  logger.error({ err: error }, 'ACC bootstrap failed');
+  console.error("Failed to start ACC", error);
   process.exit(1);
 });

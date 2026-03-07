@@ -1,45 +1,105 @@
-# ACC v1
+# ACC — Agent Command Console
 
-ACC v1 is the first production-oriented control-plane repository for the Agent Command Console.
+Agent Command Console (ACC) is the control plane for agents, tasks, workflows, and automation in the QuantumOHI infrastructure layer.
 
-## Included
-- Express API
-- Agent registry module
-- Task submission module
-- Workflow registry module
-- Redis-backed BullMQ queue
-- Postgres persistence
+## Included in this repository
+
+- Express + TypeScript service
+- Agent registry API
+- Task queue API with BullMQ
+- Workflow registry API
+- Redis connectivity
+- PostgreSQL connectivity
 - Health and readiness endpoints
-- PM2 config
-- Dockerfile
+- Docker and Docker Compose support
+- PM2 ecosystem configuration
 - GitHub Actions CI
 
-## Routes
-- `GET /health`
-- `GET /ready`
-- `GET /agents`
-- `POST /agents`
-- `GET /tasks`
-- `POST /tasks`
-- `GET /workflows`
-- `POST /workflows`
+## Repository description
 
-## Local startup
+Use this description on GitHub:
+
+> Agent Command Console (ACC) — control plane for agents, tasks, workflows, and automation.
+
+## Local development
+
 ```bash
-cp .env.example .env
 npm install
+cp .env.example .env
+npm run dev
+```
+
+## Build
+
+```bash
 npm run build
 npm start
 ```
 
-## Development
+## Docker
+
 ```bash
-npm install
-npm run dev
+docker compose up --build
 ```
 
-## Production notes
-- Build TypeScript before running under PM2.
-- Provide live Redis and Postgres services.
-- Place behind Nginx at `acc.quantumohi.com`.
-- Do not expose Redis or Postgres publicly.
+## Health endpoints
+
+- `GET /health`
+- `GET /ready`
+
+## Example API usage
+
+All protected routes support the `x-api-key` header when `API_KEY` is set.
+
+### Create agent
+
+```bash
+curl -X POST http://localhost:4000/agents \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: change-me" \
+  -d '{
+    "name": "verification-worker-1",
+    "type": "worker",
+    "capabilities": ["verify", "issue", "queue"]
+  }'
+```
+
+### Create task
+
+```bash
+curl -X POST http://localhost:4000/tasks \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: change-me" \
+  -d '{
+    "type": "verify-record",
+    "payload": {
+      "recordId": "abc-123"
+    }
+  }'
+```
+
+### Create workflow
+
+```bash
+curl -X POST http://localhost:4000/workflows \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: change-me" \
+  -d '{
+    "name": "QR-V Issue + Register",
+    "steps": ["issue", "sign", "register", "notify"]
+  }'
+```
+
+## Deployment target
+
+Recommended domain:
+
+- `acc.quantumohi.com`
+
+Recommended runtime:
+
+- Node 20
+- Redis 7
+- PostgreSQL 15
+- PM2
+- Nginx reverse proxy

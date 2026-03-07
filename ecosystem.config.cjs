@@ -1,16 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: 'acc',
-      script: 'dist/index.js',
-      cwd: '/opt/onegodian/acc',
-      exec_mode: 'fork',
+      name: "acc",
+      script: "dist/index.js",
       instances: 1,
-      watch: false,
+      exec_mode: "fork",
       env: {
-        NODE_ENV: 'production',
+        NODE_ENV: "production",
         PORT: 4000
       }
     }
   ]
-};
+}
