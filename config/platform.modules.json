@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "platform": "ACC",
+  "version": "1.1.0",
+  "canonicalDomain": "acc.onegodian.com",
+  "moduleContract": ["intake", "validate", "execute", "verify", "log", "output"],
+  "modules": [
+    {
+      "id": "ohi-command-console",
+      "label": "OHI Command Console",
+      "type": "console",
+      "routes": ["/ohi", "/ohi/services", "/ohi/executions", "/ohi/policies", "/ohi/audit", "/ohi/registry"],
+      "services": ["oscc", "ocp", "oeg", "identity", "registry", "audit"],
+      "authority": "governed-api-only"
+    },
+    {
+      "id": "agent-command-console",
+      "label": "Agent Command Console",
+      "type": "console",
+      "routes": ["/agents", "/tasks", "/workflows", "/queues", "/schedules", "/logs"],
+      "services": ["agent-registry", "task-queue", "workflow-engine", "runner"],
+      "authority": "governed-api-only"
+    },
+    {
+      "id": "runtime-console",
+      "label": "Runtime Console",
+      "type": "console",
+      "routes": ["/runtime", "/runtime/health", "/runtime/executions", "/runtime/topology"],
+      "services": ["oeg", "runner", "adapters", "telemetry"],
+      "authority": "read-and-approved-control"
+    },
+    {
+      "id": "governance-console",
+      "label": "Governance Console",
+      "type": "console",
+      "routes": ["/governance", "/governance/policies", "/governance/approvals", "/governance/overrides"],
+      "services": ["oscc", "ocp"],
+      "authority": "human-authorization-required"
+    },
+    {
+      "id": "registry-console",
+      "label": "Registry Console",
+      "type": "console",
+      "routes": ["/registry", "/registry/odin", "/registry/obp1", "/registry/certificates"],
+      "services": ["registry", "validator", "allocator", "certificate-engine"],
+      "authority": "policy-constrained"
+    },
+    {
+      "id": "identity-console",
+      "label": "Identity Console",
+      "type": "console",
+      "routes": ["/identity", "/identity/users", "/identity/roles", "/identity/api-keys", "/identity/sessions"],
+      "services": ["auth", "oidc", "rbac"],
+      "authority": "restricted-admin"
+    },
+    {
+      "id": "audit-console",
+      "label": "Audit Console",
+      "type": "console",
+      "routes": ["/audit", "/audit/executions", "/audit/security", "/audit/changes"],
+      "services": ["logs", "ledger"],
+      "authority": "append-only-read"
+    },
+    {
+      "id": "integrations-console",
+      "label": "Integrations Console",
+      "type": "console",
+      "routes": ["/integrations", "/integrations/wordpress", "/integrations/github", "/integrations/google", "/integrations/stripe"],
+      "services": ["adapters", "wp-adapter"],
+      "authority": "adapter-mediated"
+    }
+  ]
+}
