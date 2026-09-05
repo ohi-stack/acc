@@ -1,0 +1,6 @@
+{
+  "name": "ACC - Agent Command Console",
+  "description": "Unified OHI Command Console and Agent Command Console for governed systems, agents, workflows, runtime, identity, registry, audit, and integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

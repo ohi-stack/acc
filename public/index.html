@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="dark h-full bg-[#070b14] text-slate-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACC™ — Agent Command Console</title>
+  <meta name="description" content="Centralized operational control plane for coordinating AI models, software agents, tasks, workflows, repositories, approvals, and verification records.">
+  <meta property="og:title" content="ACC™ — Agent Command Console">
+  <meta property="og:description" content="Operational control plane by ONEGODIAN, LLC.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#d4af37',
+              goldLight: '#f3cf58',
+              goldDark: '#997a15',
+              navyDark: '#070b14',
+              navyCard: '#0d1322',
+              navyBorder: '#1e293b',
+              cyanAccent: '#06b6d4',
+              purpleAccent: '#a855f7'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            display: ['Cinzel', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars for high-density console */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070b14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .gold-glow {
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    }
+    .cyan-glow {
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.15);
+    }
+  </style>
+</head>
+<body class="h-full bg-[#070b14] text-slate-200 overflow-hidden select-none">
+  <div id="root" class="h-full w-full"></div>
+  <script type="module" src="/bundle.js"></script>
+</body>
+</html>

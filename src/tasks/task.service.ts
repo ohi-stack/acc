@@ -19,7 +19,7 @@ export class TaskService {
 
   async list(): Promise<TaskRecord[]> {
     const result = await pgPool.query(`SELECT id, agent_id, type, payload, status, result, created_at FROM tasks ORDER BY created_at DESC`);
-    return result.rows.map((row) => this.mapRow(row));
+    return result.rows.map((row: any) => this.mapRow(row));
   }
 
   private mapRow(row: any): TaskRecord {
@@ -27,7 +27,7 @@ export class TaskService {
       id: row.id,
       agentId: row.agent_id,
       type: row.type,
-      payload: typeof row.payload === 'object' ? row.payload : JSON.parse(row.payload),
+      payload: typeof row.payload === 'object' && row.payload !== null ? row.payload : (typeof row.payload === 'string' ? JSON.parse(row.payload) : {}),
       status: row.status,
       result: row.result ? (typeof row.result === 'object' ? row.result : JSON.parse(row.result)) : null,
       createdAt: new Date(row.created_at).toISOString()

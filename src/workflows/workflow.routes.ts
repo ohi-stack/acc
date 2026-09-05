@@ -8,7 +8,7 @@ const service = new WorkflowService();
 const CreateWorkflowSchema = z.object({
   name: z.string().min(1),
   status: z.enum(['draft', 'active', 'completed', 'failed']).optional(),
-  steps: z.array(z.record(z.unknown())).default([])
+  steps: z.array(z.record(z.string(), z.unknown())).default([])
 });
 
 router.get('/', async (_req, res, next) => {

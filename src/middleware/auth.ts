@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 export function apiKeyAuth(req: Request, res: Response, next: NextFunction): void {
-  if (req.path === "/health" || req.path === "/ready") {
+  if (req.path === "/" || req.path === "/health" || req.path === "/ready" || req.path === "/healthz" || req.path === "/readyz") {
     next();
     return;
   }

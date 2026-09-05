@@ -17,14 +17,14 @@ export class WorkflowService {
 
   async list(): Promise<WorkflowRecord[]> {
     const result = await pgPool.query(`SELECT id, name, steps, status, created_at FROM workflows ORDER BY created_at DESC`);
-    return result.rows.map((row) => this.mapRow(row));
+    return result.rows.map((row: any) => this.mapRow(row));
   }
 
   private mapRow(row: any): WorkflowRecord {
     return {
       id: row.id,
       name: row.name,
-      steps: Array.isArray(row.steps) ? row.steps : JSON.parse(row.steps),
+      steps: Array.isArray(row.steps) ? row.steps : (typeof row.steps === 'string' ? JSON.parse(row.steps) : []),
       status: row.status,
       createdAt: new Date(row.created_at).toISOString()
     };

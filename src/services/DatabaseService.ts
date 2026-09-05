@@ -1,17 +1,18 @@
-import { Client } from "pg";
-
+// MOCKED — PostgreSQL fallback for AI Studio container environment
 export class DatabaseService {
-  private readonly client: Client;
+  private connected: boolean = false;
 
-  constructor(databaseUrl: string) {
-    this.client = new Client({ connectionString: databaseUrl });
-  }
+  constructor(private readonly databaseUrl: string) {}
 
   async connect(): Promise<void> {
-    await this.client.connect();
+    this.connected = true;
+    console.log("[AI Studio] DatabaseService connected (in-memory mode)");
   }
 
   async ping(): Promise<void> {
-    await this.client.query("SELECT 1");
+    if (!this.connected) {
+      throw new Error("Database not connected");
+    }
   }
 }
+

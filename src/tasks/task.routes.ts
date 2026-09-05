@@ -8,7 +8,7 @@ const service = new TaskService();
 const CreateTaskSchema = z.object({
   agentId: z.string().uuid().optional(),
   type: z.string().min(1),
-  payload: z.record(z.unknown()).default({})
+  payload: z.record(z.string(), z.unknown()).default({})
 });
 
 router.get('/', async (_req, res, next) => {

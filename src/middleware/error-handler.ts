@@ -4,7 +4,7 @@ import { logger } from '../utils/logger';
 
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction): void {
   if (error instanceof ZodError) {
-    res.status(400).json({ error: 'validation_error', details: error.flatten() });
+    res.status(400).json({ error: 'validation_error', details: (error as ZodError).flatten() });
     return;
   }
 

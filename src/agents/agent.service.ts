@@ -18,7 +18,7 @@ export class AgentService {
 
   async list(): Promise<Agent[]> {
     const result = await pgPool.query(`SELECT id, name, type, status, capabilities, created_at FROM agents ORDER BY created_at DESC`);
-    return result.rows.map((row) => this.mapRow(row));
+    return result.rows.map((row: any) => this.mapRow(row));
   }
 
   private mapRow(row: any): Agent {
@@ -27,7 +27,7 @@ export class AgentService {
       name: row.name,
       type: row.type,
       status: row.status,
-      capabilities: Array.isArray(row.capabilities) ? row.capabilities : JSON.parse(row.capabilities),
+      capabilities: Array.isArray(row.capabilities) ? row.capabilities : (typeof row.capabilities === 'string' ? JSON.parse(row.capabilities) : []),
       createdAt: new Date(row.created_at).toISOString()
     };
   }
