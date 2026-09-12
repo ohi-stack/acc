@@ -4,6 +4,7 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import { createApp } from './app';
 import { runMigrations } from './db/migrate';
+import { runProductionMigrations } from './db/migrate-production';
 import { env } from './config/env';
 import { logger } from './utils/logger';
 
@@ -27,7 +28,8 @@ async function bootstrap(): Promise<void> {
 
   try {
     logger.info('Running database migrations');
-    await runMigrations();
+    if (env.NODE_ENV === 'production') await runProductionMigrations();
+    else await runMigrations();
     logger.info('Database migration stage completed');
   } catch (error) {
     logger.error({ error }, 'Database initialization failed');
