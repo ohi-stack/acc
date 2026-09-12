@@ -22,12 +22,17 @@ if (postgres) {
 
 const apiKey = requireValue('API_KEY');
 if (apiKey && apiKey.length < 24) failures.push('API_KEY must contain at least 24 characters');
+requireValue('ACC_OPERATOR_ID');
+const operatorRole = requireValue('ACC_OPERATOR_ROLE');
+if (operatorRole && !['super_admin', 'domain_lead', 'acc_operator', 'observer'].includes(operatorRole)) {
+  failures.push(`ACC_OPERATOR_ROLE is invalid: ${operatorRole}`);
+}
 
 const cors = requireValue('ALLOW_CORS_ORIGIN');
 if (cors === '*') failures.push('ALLOW_CORS_ORIGIN cannot be wildcard in production');
 if (String(process.env.ACC_SEED_BASELINE || 'false').toLowerCase() === 'true') failures.push('ACC_SEED_BASELINE must be false in production');
 
-for (const artifact of ['dist/index.js', 'public/bundle.js', 'public/index.html']) {
+for (const artifact of ['dist/index.js', 'dist/db/schema.sql', 'public/bundle.js', 'public/index.html']) {
   if (!fs.existsSync(artifact)) failures.push(`required build artifact missing: ${artifact}`);
 }
 
@@ -43,9 +48,12 @@ console.log(JSON.stringify({
   version,
   node: process.version,
   productionDatabase: 'configured-remote-postgresql',
+  apiAuthenticationRequired: true,
+  authorityIdentityServerBound: true,
   corsRestricted: true,
   baselineDemoSeedEnabled: false,
+  schemaPackaged: true,
   artifactsVerified: true,
   productionClaim: false,
-  note: 'Environment/build preflight passed. Deployment still requires live /ready and smoke evidence for the exact deployed SHA.'
+  note: 'Environment/build preflight passed. Deployment still requires live authentication, /ready, state/restart, and exact deployed-SHA evidence.'
 }, null, 2));
