@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -18,13 +22,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Install
         run: npm install
 
-      - name: Build
+      - name: Type check
+        run: npm run check
+
+      - name: Build production artifact
         run: npm run build
 
-      - name: Test
-        run: npm run test --if-present
+      - name: Built runtime smoke test
+        run: npm run test:smoke
+
+      - name: Production API authentication contract
+        run: npm run test:auth
+
+      - name: Production environment preflight contract
+        env:
+          NODE_ENV: production
+          ACC_VERSION: 1.2.0
+          POSTGRES_URL: postgresql://acc:placeholder@db.example.invalid:5432/acc
+          DATABASE_SSL: 'true'
+          ALLOW_CORS_ORIGIN: https://acc.onegodian.com
+          API_KEY: ci-production-contract-key-000000000001
+          ACC_OPERATOR_ID: ci-operator
+          ACC_OPERATOR_ROLE: acc_operator
+          ACC_SEED_BASELINE: 'false'
+        run: npm run preflight:production

@@ -14,23 +14,22 @@ export interface DatabaseClient {
 let dbInstance: DatabaseClient | null = null;
 
 export async function getDatabase(): Promise<DatabaseClient> {
-  if (dbInstance) {
-    return dbInstance;
-  }
+  if (dbInstance) return dbInstance;
 
-  // If a real external postgres URL is provided and not pointing to localhost mock
-  const isExternalPg = env.POSTGRES_URL && 
-    !env.POSTGRES_URL.includes('localhost') && 
+  const isExternalPg = Boolean(env.POSTGRES_URL) &&
+    !env.POSTGRES_URL.includes('localhost') &&
     !env.POSTGRES_URL.includes('127.0.0.1');
 
   if (isExternalPg) {
     try {
-      logger.info({ url: env.POSTGRES_URL.replace(/:[^:@]+@/, ':***@') }, 'Connecting to remote PostgreSQL');
+      logger.info('Connecting to configured remote PostgreSQL');
       const pool = new Pool({
         connectionString: env.POSTGRES_URL,
-        ssl: env.DATABASE_SSL ? { rejectUnauthorized: false } : false
+        ssl: env.DATABASE_SSL ? { rejectUnauthorized: false } : false,
+        max: Number(process.env.ACC_DB_POOL_MAX || 10),
+        connectionTimeoutMillis: Number(process.env.ACC_DB_CONNECT_TIMEOUT_MS || 10000),
+        idleTimeoutMillis: 30000
       });
-      // test probe
       await pool.query('SELECT 1');
       logger.info('Connected to remote PostgreSQL database');
       const remoteClient: DatabaseClient = {
@@ -44,29 +43,30 @@ export async function getDatabase(): Promise<DatabaseClient> {
       dbInstance = remoteClient;
       return remoteClient;
     } catch (err) {
-      logger.warn({ err }, 'Failed to connect to remote PostgreSQL, falling back to local persistent PGlite');
+      if (env.NODE_ENV === 'production') {
+        logger.error({ err }, 'Remote PostgreSQL connection failed in production');
+        throw err;
+      }
+      logger.warn({ err }, 'Remote PostgreSQL connection failed; using local PGlite for non-production runtime');
     }
+  } else if (env.NODE_ENV === 'production') {
+    throw new Error('production_remote_postgresql_required');
   }
 
-  // Durable PGlite (WASM PostgreSQL 16) with disk persistence
   const dataDir = path.resolve(process.cwd(), 'data', 'acc-pgdata');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
-  logger.info({ dataDir }, 'Initializing durable PostgreSQL (PGlite engine) with local persistence');
+  logger.info({ dataDir }, 'Initializing local PGlite for development/test persistence');
   const pglite = new PGlite(dataDir);
   await pglite.waitReady;
-  logger.info('Durable PostgreSQL engine is ready');
+  logger.info('Local PGlite engine is ready');
 
   const localClient: DatabaseClient = {
     query: async <T = any>(sql: string, params: any[] = []): Promise<{ rows: T[] }> => {
       const res = await pglite.query(sql, params);
       return { rows: (res.rows as any[]) || [] };
     },
-    close: async () => {
-      await pglite.close();
-    },
+    close: async () => { await pglite.close(); },
     isRemote: () => false
   };
 
@@ -89,7 +89,7 @@ export async function postgresHealth(): Promise<{ status: 'Healthy' | 'Degraded'
     return {
       status: 'Healthy',
       latencyMs: Date.now() - start,
-      details: db.isRemote() ? 'Remote PostgreSQL' : 'Persistent PGlite (PostgreSQL 16 Engine)'
+      details: db.isRemote() ? 'Remote PostgreSQL' : 'Local PGlite (development/test only)'
     };
   } catch (err: any) {
     return {
