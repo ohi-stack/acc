@@ -23,10 +23,10 @@ export function apiAuth(req: Request, res: Response, next: NextFunction): void {
     const role = ['super_admin', 'domain_lead', 'acc_operator', 'observer'].includes(headerRole)
       ? headerRole
       : 'acc_operator';
-    (req as any).actor = {
-      actorId: String(req.headers['x-acc-actor'] || 'local-operator'),
-      role
-    };
+    const actorId = String(req.headers['x-acc-actor'] || 'local-operator');
+    req.headers['x-acc-role'] = role;
+    req.headers['x-acc-actor'] = actorId;
+    (req as any).actor = { actorId, role };
     next();
     return;
   }
@@ -37,8 +37,11 @@ export function apiAuth(req: Request, res: Response, next: NextFunction): void {
     return;
   }
 
-  // Production authority identity is server-configured. Caller headers cannot
-  // self-elevate privileges or impersonate another operator.
+  // Downstream legacy routing reads these headers. Overwrite them after
+  // authentication so caller-supplied values cannot self-elevate privileges
+  // or impersonate another operator.
+  req.headers['x-acc-role'] = env.ACC_OPERATOR_ROLE;
+  req.headers['x-acc-actor'] = env.ACC_OPERATOR_ID;
   (req as any).actor = {
     actorId: env.ACC_OPERATOR_ID,
     role: env.ACC_OPERATOR_ROLE
