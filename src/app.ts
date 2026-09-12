@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
-import { logger } from './utils/logger';
 import { v1Router } from './api/v1.routes';
 import { errorHandler } from './middleware/error-handler';
+import { apiAuth } from './middleware/api-auth';
 import { env } from './config/env';
 import { postgresHealth } from './db/postgres';
 
@@ -48,14 +48,16 @@ export function createApp() {
     });
   });
 
-  app.use('/api/v1', v1Router);
-
   app.get('/api/health', (_req, res) => res.json({
     status: 'healthy',
     service: 'ACC',
     version: env.ACC_VERSION,
     environment: env.NODE_ENV
   }));
+
+  // The operational API is private. Production identity/role is bound to the
+  // server-side API key configuration and cannot be elevated by request headers.
+  app.use('/api/v1', apiAuth, v1Router);
 
   const spaRoutes = [
     '/',
