@@ -35,6 +35,9 @@ jobs:
       - name: Built runtime smoke test
         run: npm run test:smoke
 
+      - name: Production API authentication contract
+        run: npm run test:auth
+
       - name: Production environment preflight contract
         env:
           NODE_ENV: production
@@ -43,5 +46,7 @@ jobs:
           DATABASE_SSL: 'true'
           ALLOW_CORS_ORIGIN: https://acc.onegodian.com
           API_KEY: ci-production-contract-key-000000000001
+          ACC_OPERATOR_ID: ci-operator
+          ACC_OPERATOR_ROLE: acc_operator
           ACC_SEED_BASELINE: 'false'
         run: npm run preflight:production
