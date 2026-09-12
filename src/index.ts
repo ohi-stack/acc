@@ -4,62 +4,57 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import { createApp } from './app';
 import { runMigrations } from './db/migrate';
+import { env } from './config/env';
 import { logger } from './utils/logger';
 
 dotenv.config();
 
 async function bootstrap(): Promise<void> {
-  const port = 3000;
+  const port = env.PORT;
 
-  logger.info('ACC™ — Agent Command Console starting up...');
+  logger.info({ version: env.ACC_VERSION, environment: env.NODE_ENV }, 'ACC — Agent Command Console starting');
 
-  // 1. Ensure client bundle exists
   const bundlePath = path.resolve(process.cwd(), 'public/bundle.js');
   if (!fs.existsSync(bundlePath)) {
-    logger.info('Building client bundle with esbuild...');
-    try {
-      execSync('npx esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify', {
-        stdio: 'inherit'
-      });
-      logger.info('Client bundle built successfully.');
-    } catch (err) {
-      logger.error({ err }, 'Failed to bundle client code');
+    if (env.NODE_ENV === 'production') {
+      throw new Error('production_client_bundle_missing');
     }
+    logger.info('Building client bundle for non-production runtime');
+    execSync('npx esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify', {
+      stdio: 'inherit'
+    });
   }
 
-  // 2. Run Database Migrations & Initial Seeding
   try {
-    logger.info('Running database migrations and seed data...');
+    logger.info('Running database migrations');
     await runMigrations();
-    logger.info('Database initialized and verified.');
+    logger.info('Database migration stage completed');
   } catch (error) {
     logger.error({ error }, 'Database initialization failed');
+    if (env.NODE_ENV === 'production') throw error;
   }
 
-  // 3. Create & start HTTP server
   const app = createApp();
-
   const server = app.listen(port, '0.0.0.0', () => {
-    logger.info(`ACC™ Control Plane listening on http://0.0.0.0:${port}`);
-    console.log(`\n============================================================`);
-    console.log(` ACC™ — Agent Command Console Operational Control Plane`);
-    console.log(` Canonical Domain: acc.onegodian.com`);
-    console.log(` Status: LISTENING ON PORT ${port}`);
-    console.log(` Console Dashboard: http://localhost:${port}/console/dashboard`);
-    console.log(` Command Center:   http://localhost:${port}/console/command`);
-    console.log(` API Endpoint:     http://localhost:${port}/api/v1`);
-    console.log(`============================================================\n`);
+    logger.info({ port, version: env.ACC_VERSION }, 'ACC control plane listening');
   });
 
-  const shutdown = () => {
-    logger.info('Gracefully shutting down ACC...');
+  const shutdown = (signal: string) => {
+    logger.info({ signal }, 'Gracefully shutting down ACC');
+    const forceExit = setTimeout(() => {
+      logger.error('ACC graceful shutdown timed out');
+      process.exit(1);
+    }, 10000);
+    forceExit.unref();
+
     server.close(() => {
+      clearTimeout(forceExit);
       process.exit(0);
     });
   };
 
-  process.on('SIGTERM', shutdown);
-  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
 bootstrap().catch((error) => {
