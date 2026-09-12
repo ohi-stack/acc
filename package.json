@@ -1,6 +1,6 @@
 {
   "name": "@onegodian/acc",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ACC — unified OHI Command Console and Agent Command Console for governed systems, agents, workflows, runtime, identity, registry, audit, and integrations.",
   "main": "dist/index.js",
   "license": "MIT",
@@ -8,8 +8,11 @@
     "dev": "tsx watch src/index.ts",
     "build:client": "esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify",
     "build": "npm run build:client && tsc",
-    "start": "node server.ts",
-    "test": "node -e \"console.log('all tests passed')\""
+    "check": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "preflight:production": "node scripts/preflight-production.mjs",
+    "test:smoke": "node scripts/smoke-runtime.mjs",
+    "test": "npm run check && npm run build && npm run test:smoke"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
