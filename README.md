@@ -168,6 +168,22 @@ curl -X POST http://localhost:4000/workflows \
   }'
 ```
 
+## MCP / OMOS Authorization Boundary
+
+ACC can orchestrate and surface approval for actions routed through the OneGodian MCP Standard™ and OMOS Connection & Adaptation Layer™, but the responsibilities remain separate:
+
+- MCP provides interoperability and normalized invocation.
+- OMOS enforces connector permissions, governance state, verification boundaries, and Decision Record evidence.
+- ACC provides operator workflow, approval UX, orchestration, and execution coordination.
+- OCP/OEG or an approved successor service provides authoritative policy/execution authorization where deployed.
+- The connected domain remains the source of record for its own state and final action result.
+
+A caller-supplied object such as `{ "approved": true }` is not sufficient production authorization evidence by itself. Consequential production actions should reference an approval record or verifier that can prove actor authority, policy, scope, target, operation, timestamp, and disposition.
+
+Permission and approval are separate gates: an approval cannot grant an undeclared connector permission, and connector permission cannot waive required human approval.
+
+See `docs/MCP-AUTHORIZATION-CONTRACT.md` for the production-readiness contract.
+
 ## Deployment Target
 
 Canonical domain:
@@ -195,3 +211,6 @@ ACC should be developed as reusable infrastructure, not a one-off dashboard:
 - Replaceable execution adapters
 - Unified operator shell
 - Clear separation between interface, governance, execution, identity, and audit
+- Authoritative approval records for consequential external execution
+- Fail-closed behavior when approval evidence cannot be verified
+- Domain result verification and audit references before consequential workflows are considered complete
