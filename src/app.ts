@@ -62,6 +62,8 @@ export function createApp() {
   const spaRoutes = [
     '/',
     '/console/*',
+    '/oru',
+    '/oru/*',
     '/agents',
     '/agents/*',
     '/tasks',
