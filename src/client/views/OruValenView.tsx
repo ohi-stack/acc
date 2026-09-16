@@ -17,25 +17,55 @@ export const OruValenView: React.FC = () => {
   const systems = [
     {
       title: 'Institutional Memory',
-      description: 'Authoritative OneGodian chronology, entities, terminology, architecture, policies, and records.',
+      description: 'Authoritative OneGodian chronology, entities, terminology, architecture, policies, standards, and approved records.',
       icon: Database,
-      status: 'Connected by contract'
+      status: 'Approved records'
     },
     {
       title: 'Lived Experience',
-      description: 'Structured event → context → decision → action → outcome → lesson records where authorized.',
+      description: 'Authorized event → context → decision → stated reason → action → result → later outcome → proposed lesson records.',
       icon: History,
       status: 'Controlled source'
     },
     {
       title: 'Decision Memory',
-      description: 'Preserves decisions, constraints, stated reasons, outcomes, and later corrections without manufacturing authority.',
+      description: 'Preserves problems, alternatives, constraints, choices, stated reasoning, outcomes, revisions, and later corrections.',
       icon: FileCheck2,
       status: 'Human-governed'
     },
     {
+      title: 'Behavior & Routine',
+      description: 'Repeated operating patterns and bottlenecks derived only from authorized evidence and kept distinct from verified fact.',
+      icon: History,
+      status: 'Evidence-based'
+    },
+    {
+      title: 'Relationship Context',
+      description: 'Factual, access-controlled records of relevant people, roles, interactions, and commitments without speculative profiling.',
+      icon: UserRoundCheck,
+      status: 'Access-controlled'
+    },
+    {
+      title: 'Economic Reality',
+      description: 'Permissioned evidence about what produces or consumes resources. Sensitive financial records remain restricted and purpose-limited.',
+      icon: Scale,
+      status: 'Restricted'
+    },
+    {
+      title: 'Preferences & Judgment',
+      description: 'Repeated approvals, rejections, corrections, and choices used to identify durable preferences without replacing human judgment.',
+      icon: Brain,
+      status: 'Reviewable'
+    },
+    {
+      title: 'Lessons & Operating Rules',
+      description: 'Outcome-derived learning proposals that remain reviewable before they become durable memory or current-state rules.',
+      icon: FileCheck2,
+      status: 'Approval-gated'
+    },
+    {
       title: 'Current-State Model',
-      description: 'Tracks what is true now while preserving older states as historical context rather than current fact.',
+      description: 'Tracks the newest verified and approved priorities, constraints, roles, commitments, preferences, and risks while preserving history.',
       icon: Layers3,
       status: 'Versioned'
     },
@@ -50,11 +80,11 @@ export const OruValenView: React.FC = () => {
   const evidenceClasses = [
     {
       title: 'FACT',
-      description: 'Evidence-supported record established by an approved source or verified system event.'
+      description: 'Evidence-supported record established by an approved source, direct record, or verified system event.'
     },
     {
-      title: 'STATED POSITION',
-      description: 'An explicit human statement, preference, intention, correction, or decision at a recorded point in time.'
+      title: 'USER STATEMENT / STATED POSITION',
+      description: 'An explicit human statement, preference, intention, belief, correction, instruction, or decision at a recorded point in time.'
     },
     {
       title: 'INFERENCE',
@@ -62,8 +92,19 @@ export const OruValenView: React.FC = () => {
     },
     {
       title: 'PREDICTION',
-      description: 'A forecast of likely preference or action. Prediction may support a recommendation but never becomes authority.'
+      description: 'A forecast of likely preference or action. Prediction may support a recommendation but never becomes fact or authority.'
     }
+  ];
+
+  const maturity = [
+    ['Twin guide surface', 'Implemented in ACC source'],
+    ['Lived Experience contract', 'Defined in synchronized source'],
+    ['Approved-source automatic retrieval', 'Integration target'],
+    ['Automatic memory injection', 'Integration target'],
+    ['ACC execution handoff bound to Oru provenance', 'Integration target'],
+    ['Outcome ingestion / learning proposals', 'Integration target'],
+    ['Authenticated durable current-state editing', 'Integration target'],
+    ['Complete digital-twin learning loop', 'Not claimed Production']
   ];
 
   return (
@@ -74,44 +115,70 @@ export const OruValenView: React.FC = () => {
             <Brain className="w-5 h-5 text-purple-400" />
             <h1 className="text-xl font-display font-bold text-slate-100">Oru’Valen™ Intelligence Twin</h1>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950/50 text-purple-300 border border-purple-500/30">
-              DECISION SUPPORT
+              O-H-I TWIN
             </span>
           </div>
-          <p className="text-xs text-slate-400 font-mono mt-1.5 max-w-3xl">
-            Oru’Valen is the O-H-I Twin that learns, remembers, reasons, and assists across the OneGodian ecosystem while remaining subordinate to authorized human judgment.
+          <p className="text-xs text-slate-400 font-mono mt-1.5 max-w-4xl">
+            Oru’Valen is the personalized continuity/context layer that preserves approved history, lived experience, decisions, outcomes, corrections, and current-state context so OMOS can reason with continuity while ACC executes only authorized actions.
           </p>
         </div>
-        <a
-          href="https://omos.onegodian.com"
-          target="_blank"
-          rel="noreferrer"
-          className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0d1322] border border-[#1e293b] text-xs font-mono text-slate-300 hover:text-white hover:border-purple-500/40 transition-all"
-        >
-          OMOS Node <ExternalLink className="w-3.5 h-3.5" />
-        </a>
+        <div className="flex flex-wrap gap-2 shrink-0">
+          <a
+            href="https://omos.onegodian.com/oru/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0d1322] border border-[#1e293b] text-xs font-mono text-slate-300 hover:text-white hover:border-purple-500/40 transition-all"
+          >
+            Oru Architecture <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+          <a
+            href="https://omos.onegodian.com/api/oru.json"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0d1322] border border-[#1e293b] text-xs font-mono text-slate-300 hover:text-white hover:border-purple-500/40 transition-all"
+          >
+            Machine Profile <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
-        {systems.map(({ title, description, icon: Icon, status }) => (
-          <div key={title} className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <Icon className="w-4 h-4 text-purple-400 shrink-0" />
-                <h2 className="text-sm font-semibold text-slate-100">{title}</h2>
-              </div>
-            </div>
-            <span className="inline-flex mt-3 text-[9px] font-mono uppercase tracking-wide text-slate-400 border border-[#26324a] rounded px-2 py-0.5">
-              {status}
-            </span>
-            <p className="mt-3 text-xs leading-relaxed text-slate-400">{description}</p>
-          </div>
-        ))}
+      <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <UserRoundCheck className="w-4 h-4 text-emerald-400" />
+          <h2 className="text-sm font-mono font-semibold text-slate-200">Canonical Governed Loop</h2>
+        </div>
+        <div className="font-mono text-[11px] leading-7 text-[#f3cf58] overflow-x-auto">
+          HUMAN INPUT OR AUTHORIZED EVIDENCE → ORU CONTEXT SNAPSHOT → OMOS GOVERNED REASONING → COUNCIL / SYNTHESIS → HUMAN GATE → DECISION RECORD → ACC AUTHORIZED EXECUTION → VERIFICATION / AUDIT → OUTCOME → PROPOSED ORU LEARNING → HUMAN-APPROVED MEMORY / CURRENT-STATE UPDATE
+        </div>
       </div>
+
+      <section>
+        <div className="flex items-center gap-2 mb-3">
+          <History className="w-4 h-4 text-purple-400" />
+          <h2 className="text-sm font-mono font-semibold text-slate-200">Memory & Intelligence Architecture</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+          {systems.map(({ title, description, icon: Icon, status }) => (
+            <div key={title} className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <Icon className="w-4 h-4 text-purple-400 shrink-0" />
+                  <h3 className="text-sm font-semibold text-slate-100">{title}</h3>
+                </div>
+              </div>
+              <span className="inline-flex mt-3 text-[9px] font-mono uppercase tracking-wide text-slate-400 border border-[#26324a] rounded px-2 py-0.5">
+                {status}
+              </span>
+              <p className="mt-3 text-xs leading-relaxed text-slate-400">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
         <div className="flex items-center gap-2 mb-4">
           <Scale className="w-4 h-4 text-cyan-400" />
-          <h2 className="text-sm font-mono font-semibold text-slate-200">Evidence Discipline</h2>
+          <h2 className="text-sm font-mono font-semibold text-slate-200">Evidence Discipline — Fact Is Not Inference</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
           {evidenceClasses.map(({ title, description }) => (
@@ -124,33 +191,50 @@ export const OruValenView: React.FC = () => {
             </div>
           ))}
         </div>
+        <div className="mt-3 rounded-lg border-l-2 border-[#d4af37] bg-[#d4af37]/5 px-4 py-3 text-xs leading-5 text-slate-300">
+          Direct human correction has higher authority than a prior model inference about that human. Historical records remain preserved; newer verified and approved state may supersede an earlier current-state assumption.
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <ShieldCheck className="w-4 h-4 text-amber-400" />
-            <h2 className="text-sm font-mono font-semibold text-slate-200">Authority Boundary</h2>
+            <h2 className="text-sm font-mono font-semibold text-slate-200">Authority & Privacy Boundary</h2>
           </div>
           <div className="text-xs text-slate-400 leading-relaxed space-y-2">
-            <p>Oru’Valen may recommend, summarize, model preferences, and prepare execution requests.</p>
-            <p className="text-slate-200">Oru’Valen does not own, govern, self-authorize, or replace the human authority of One Gregory Onegodian™.</p>
-            <p>Privileged actions continue through ACC governance, approvals, policy checks, execution controls, and audit logging.</p>
+            <p>Oru’Valen may recommend, summarize, model preferences, provide continuity, create proposed learning, and prepare execution requests.</p>
+            <p className="text-slate-200">Oru’Valen does not own, govern, self-authorize, impersonate the founder, or replace authorized human judgment.</p>
+            <p>Lived Experience does not imply background surveillance. Only user-supplied or explicitly authorized sources may contribute context.</p>
+            <p>Restricted financial, health, legal, identity, private-contact, and credential data require appropriate access controls. Connector read access never implies write authority.</p>
+            <p>Privileged actions continue through applicable OMOS Human Gate, ACC approvals, policy checks, execution controls, and audit logging.</p>
           </div>
         </div>
 
         <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <UserRoundCheck className="w-4 h-4 text-emerald-400" />
-            <h2 className="text-sm font-mono font-semibold text-slate-200">Canonical Learning Loop</h2>
+            <Layers3 className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-sm font-mono font-semibold text-slate-200">Integration Maturity</h2>
           </div>
-          <div className="font-mono text-[11px] leading-7 text-slate-300">
-            LIVE → CAPTURE → VERIFY → CLASSIFY → REMEMBER → DETECT PATTERNS → PREDICT → RECOMMEND → ACT WITH AUTHORITY → MEASURE → LEARN
+          <div className="space-y-2">
+            {maturity.map(([capability, status]) => (
+              <div key={capability} className="flex items-center justify-between gap-4 border-b border-[#1e293b]/70 pb-2 last:border-0 last:pb-0">
+                <span className="text-xs text-slate-300">{capability}</span>
+                <span className="text-[10px] font-mono text-[#f3cf58] text-right">{status}</span>
+              </div>
+            ))}
           </div>
-          <p className="mt-3 text-[11px] leading-5 text-slate-400">
-            Corrections and measured outcomes update the current-state model; inference and prediction remain distinct from verified fact.
-          </p>
         </div>
+      </div>
+
+      <div className="bg-[#0d1322] border border-purple-500/20 rounded-xl p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Workflow className="w-4 h-4 text-purple-300" />
+          <h2 className="text-sm font-mono font-semibold text-slate-200">Outcome Learning Rule</h2>
+        </div>
+        <p className="text-xs leading-relaxed text-slate-400">
+          Verified execution outcomes should return through ACC and OMOS provenance before Oru creates a learning proposal. A learning proposal is reviewable evidence, not an automatic durable self-rewrite; durable memory/current-state changes remain attributable, versioned, and approval-gated.
+        </p>
       </div>
     </div>
   );
