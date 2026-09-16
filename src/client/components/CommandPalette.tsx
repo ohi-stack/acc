@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Terminal, Bot, ListTodo, ShieldCheck, Cpu, Code2, Rocket, FileSpreadsheet, HeartPulse } from 'lucide-react';
+import { Search, Terminal, Brain, Network, Bot, ListTodo, ShieldCheck, Cpu, Code2, Rocket, FileSpreadsheet, HeartPulse } from 'lucide-react';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -14,8 +14,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle
+        onClose();
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -30,6 +29,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
   const actions = [
     { label: 'Go to Command Center', icon: Terminal, route: '/console/command', cat: 'Navigation' },
     { label: 'Go to Dashboard', icon: Terminal, route: '/console/dashboard', cat: 'Navigation' },
+    { label: 'Open Oru’Valen Intelligence Twin', icon: Brain, route: '/oruvalen', cat: 'Intelligence' },
+    { label: 'Open OMOS Runtime Integration', icon: Network, route: '/omos', cat: 'OMOS' },
     { label: 'Inspect Agents Registry', icon: Bot, route: '/agents', cat: 'Agents' },
     { label: 'View Tasks & Queue', icon: ListTodo, route: '/tasks', cat: 'Tasks' },
     { label: 'Human Authorization Approvals', icon: ShieldCheck, route: '/approvals', cat: 'Governance' },
