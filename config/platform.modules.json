@@ -1,9 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "platform": "ACC",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "canonicalDomain": "acc.onegodian.com",
   "moduleContract": ["intake", "validate", "execute", "verify", "log", "output"],
+  "authorityModel": {
+    "humanFinalAuthority": true,
+    "rule": "Oru’Valen and OMOS provide intelligence and decision support; ACC coordinates governed execution; privileged actions require applicable policy and human authorization."
+  },
   "modules": [
     {
       "id": "ohi-command-console",
@@ -19,6 +23,22 @@
       "type": "console",
       "routes": ["/agents", "/tasks", "/workflows", "/queues", "/schedules", "/logs"],
       "services": ["agent-registry", "task-queue", "workflow-engine", "runner"],
+      "authority": "governed-api-only"
+    },
+    {
+      "id": "oruvalen-intelligence-twin-console",
+      "label": "Oru’Valen™",
+      "type": "intelligence-console",
+      "routes": ["/oruvalen", "/oruvalen/context", "/oruvalen/memory", "/oruvalen/decisions", "/oruvalen/provenance"],
+      "services": ["onegodian-llm", "institutional-memory", "lived-experience", "decision-memory", "current-state-model", "provenance"],
+      "authority": "decision-support-only"
+    },
+    {
+      "id": "omos-console",
+      "label": "OMOS™",
+      "type": "operating-system-console",
+      "routes": ["/omos", "/omos/reference-run", "/omos/providers", "/omos/persistence", "/omos/manifest"],
+      "services": ["omos-runtime", "alignment", "engineering-council", "provider-routing", "decision-records"],
       "authority": "governed-api-only"
     },
     {
@@ -65,8 +85,8 @@
       "id": "integrations-console",
       "label": "Integrations Console",
       "type": "console",
-      "routes": ["/integrations", "/integrations/wordpress", "/integrations/github", "/integrations/google", "/integrations/stripe"],
-      "services": ["adapters", "wp-adapter"],
+      "routes": ["/integrations", "/integrations/wordpress", "/integrations/github", "/integrations/google", "/integrations/stripe", "/integrations/omos", "/integrations/onegodian-llm"],
+      "services": ["adapters", "wp-adapter", "omos-adapter", "llm-adapter"],
       "authority": "adapter-mediated"
     }
   ]
