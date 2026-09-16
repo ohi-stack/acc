@@ -9,7 +9,7 @@ const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
   APP_NAME: z.string().default('acc'),
-  ACC_VERSION: z.string().default('1.2.0'),
+  ACC_VERSION: z.string().default('1.3.0'),
   LOG_LEVEL: z.string().default('info'),
   REDIS_URL: z.string().default('redis://localhost:6379'),
   POSTGRES_URL: z.string().default('postgres://postgres:postgres@localhost:5432/acc'),
