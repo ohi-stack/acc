@@ -55,13 +55,15 @@ export function createApp() {
     environment: env.NODE_ENV
   }));
 
-  // The operational API is private. Production identity/role is bound to the
-  // server-side API key configuration and cannot be elevated by request headers.
+  // Operational APIs are private. Production identity/role is bound to
+  // server-side configuration and cannot be elevated by client headers.
   app.use('/api/v1', apiAuth, v1Router);
 
   const spaRoutes = [
     '/',
     '/console/*',
+    '/oru',
+    '/oru/*',
     '/agents',
     '/agents/*',
     '/tasks',
