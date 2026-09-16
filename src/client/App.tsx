@@ -3,6 +3,7 @@ import { TopBar } from './components/TopBar';
 import { Sidebar } from './components/Sidebar';
 import { CommandPalette } from './components/CommandPalette';
 import { DashboardView } from './views/DashboardView';
+import { OruValenView } from './views/OruValenView';
 import { CommandCenterView } from './views/CommandCenterView';
 import { AgentsView } from './views/AgentsView';
 import { TasksView } from './views/TasksView';
@@ -26,14 +27,14 @@ export const App: React.FC = () => {
   });
   const [pendingApprovals, setPendingApprovals] = useState<number>(0);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [systemStatus, setSystemStatus] = useState('Operational');
+  const [systemStatus] = useState('Operational');
 
   const refreshPendingApprovals = async () => {
     try {
       const count = await api.getPendingApprovalCount();
       setPendingApprovals(count);
     } catch {
-      // ignore
+      // Keep the current value when the API is temporarily unavailable.
     }
   };
 
@@ -58,6 +59,9 @@ export const App: React.FC = () => {
   };
 
   const renderCurrentView = () => {
+    if (currentRoute.startsWith('/oru')) {
+      return <OruValenView onNavigate={navigate} />;
+    }
     if (currentRoute.startsWith('/console/command')) {
       return <CommandCenterView onNavigate={navigate} onRefreshApprovals={refreshPendingApprovals} />;
     }
@@ -108,13 +112,11 @@ export const App: React.FC = () => {
     if (currentRoute.startsWith('/account')) {
       return <AccountView />;
     }
-    // Default to Dashboard
     return <DashboardView onNavigate={navigate} onRefreshApprovals={refreshPendingApprovals} />;
   };
 
   return (
     <div className="flex flex-col h-screen w-screen bg-[#070b14] text-slate-100 overflow-hidden">
-      {/* Global Top Bar */}
       <TopBar
         pendingApprovals={pendingApprovals}
         onNavigate={navigate}
@@ -122,22 +124,18 @@ export const App: React.FC = () => {
         systemStatus={systemStatus}
       />
 
-      {/* Main App Workspace */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Persistent Navigation */}
         <Sidebar
           currentRoute={currentRoute}
           onNavigate={navigate}
           pendingApprovals={pendingApprovals}
         />
 
-        {/* Dynamic View Area */}
         <main className="flex-1 bg-[#070b14] overflow-hidden">
           {renderCurrentView()}
         </main>
       </div>
 
-      {/* Global Command Palette (⌘K) */}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
