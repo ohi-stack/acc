@@ -1,50 +1,68 @@
-# ACC™ — OHI Command Console + Agent Command Console
+# ACC™ — OneGodian Control Plane
 
-ACC™ is the unified command console for the OneGodian operational stack.
+**Current baseline:** v1.3.0  
+**Canonical production domain:** `https://acc.onegodian.com`
 
-Canonical production domain:
+ACC™ is the unified execution and supervision console for the OneGodian operational stack.
 
-- `acc.onegodian.com`
+ACC combines three first-class operating surfaces inside one control-plane interface:
 
-ACC combines two first-class console modules inside one platform:
+1. **Oru’Valen™** — O-H-I Twin / operational intelligence, continuity, current-state model, lived-experience architecture, and decision support.
+2. **OHI Command Console** — governed O-H-I systems, runtime status, registry visibility, identity, policy, audit, and service supervision.
+3. **Agent Command Console** — external agents, tasks, queues, workflows, delegation, schedules, runtime activity, and automation operations.
 
-1. **OHI Command Console** — OHI systems, governed execution, runtime status, registry visibility, identity, policy, audit, and service supervision.
-2. **Agent Command Console** — agents, tasks, queues, workflows, delegation, schedules, runtime activity, and automation operations.
+These are not competing dashboards. Oru’Valen is not an external AI agent. External agents remain separate bounded executors registered and governed through ACC.
 
-These are not separate products and should not be deployed as competing dashboards. They are unified modules inside the same ACC control-plane interface.
+## Canonical operating chain
+
+```text
+Human input
+→ Oru’Valen context and continuity
+→ OMOS governed reasoning / Decision Record
+→ Human gate
+→ ACC authorized execution
+→ Agents / tools / integrations
+→ Outcome
+→ Proposed learning
+```
+
+Human authority remains final.
 
 ## Repository description
 
-Use this description on GitHub:
+> ACC™ — unified OneGodian control plane for Oru’Valen, O-H-I systems, governed execution, agents, workflows, approvals, deployments, registry operations, identity, verification, audit, and platform supervision at acc.onegodian.com.
 
-> ACC™ — unified command console for OHI systems, governed execution, agents, workflows, automation, registry operations, identity, audit, and platform governance at acc.onegodian.com.
+## Architectural position
 
-## Architectural Position
+ACC is the operator and execution-control layer. It does not replace human authority or OMOS governed reasoning.
 
-ACC is the operator interface layer. It does not replace governance authority or execution authority.
+Primary boundaries:
 
-Authority flows through:
-
-- OSCC™ — OHI Systems Command Center / governance control plane
-- OCP™ — policy and authorization layer
-- OEG™ — OHI Execution Gateway
-- Identity / JWT / RBAC services
-- Registry and audit services
+- **Oru’Valen™** — continuity, context, lived-experience model, decision support.
+- **OMOS™** — governed reasoning, Alignment, Council synthesis, Decision Records.
+- **ACC™** — execution control, permissions, tasks, agents, workflows, approvals, deployment, audit.
+- **OSCC™ / OCP™ / OEG™** — governance/policy/execution infrastructure where applicable.
+- **Identity / JWT / RBAC** — authorization and actor binding.
+- **Registry / audit / verification** — provenance and evidence.
 
 ACC displays, routes, supervises, and controls approved workflows through governed APIs.
 
 ## Included in this repository
 
 - Express + TypeScript service
-- Unified ACC shell
+- React ACC shell
+- Oru’Valen first-class console surface
 - OHI Command Console module
 - Agent Command Console module
 - Agent registry API
 - Task queue API with BullMQ
 - Workflow registry API
-- OHI service status panels
-- OEG execution bridge configuration
-- OSCC/OCP integration placeholders
+- Engineering Council interface
+- Model/provider interface
+- Connections interface
+- Approval queue
+- Deployment records
+- Verification and audit surfaces
 - Redis connectivity
 - PostgreSQL connectivity
 - Health and readiness endpoints
@@ -52,52 +70,56 @@ ACC displays, routes, supervises, and controls approved workflows through govern
 - PM2 ecosystem configuration
 - GitHub Actions CI
 
-## Console Modules
+## Primary console routes
 
-### OHI Command Console
+### Oru’Valen™
+
+- `/oru`
 
 Purpose:
 
-- Monitor OHI infrastructure
-- View OEG runtime status
-- Surface OSCC governance state
-- Track service health
-- Display registry and audit summaries
-- Trigger approved execution workflows through governed APIs
+- show the O-H-I Twin architecture and authority boundary;
+- expose the five Oru intelligence systems;
+- distinguish fact, stated position, inference, and prediction;
+- link into approvals, audit, Engineering Council, connections, and OMOS;
+- serve as the canonical ACC surface for future lived-experience, decision-memory, and current-state integrations.
 
-Suggested routes:
+### Core ACC
 
 - `/`
-- `/dashboard`
-- `/ohi`
-- `/ohi/services`
-- `/ohi/executions`
-- `/ohi/policies`
-- `/ohi/audit`
-- `/ohi/registry`
-- `/ohi/settings`
-
-### Agent Command Console
-
-Purpose:
-
-- Manage agents
-- Register capabilities
-- Create and monitor tasks
-- Manage workflow definitions
-- View queue status
-- Inspect failed/retried jobs
-
-Suggested routes:
-
+- `/console/dashboard`
+- `/console/command`
 - `/agents`
-- `/agents/:id`
 - `/tasks`
-- `/tasks/:id`
 - `/workflows`
-- `/workflows/:id`
-- `/queues`
-- `/logs`
+- `/engineering-council`
+- `/models`
+- `/connections`
+- `/executions`
+- `/approvals`
+- `/deployments`
+- `/verification`
+- `/audit`
+- `/status`
+- `/docs`
+- `/settings`
+- `/account`
+
+## Operational versioning rule
+
+A capability must not be represented as Operational or Production unless it is implemented, documented, repeatable, permissioned, and verified in the applicable environment.
+
+Allowed maturity labels:
+
+- Operational
+- Production
+- In development
+- Prototype
+- Concept
+- Historical proposal
+- Paused
+- Archived
+- Retired
 
 ## Local development
 
@@ -107,11 +129,13 @@ cp .env.example .env
 npm run dev
 ```
 
-## Build
+## Validation
 
 ```bash
+npm run check
 npm run build
-npm start
+npm test
+npm run preflight:production
 ```
 
 ## Docker
@@ -124,74 +148,56 @@ docker compose up --build
 
 - `GET /health`
 - `GET /ready`
+- `GET /api/health`
 
-## Example API usage
+## Security boundary
 
-All protected routes support the `x-api-key` header when `API_KEY` is set.
+- Never commit credentials or deployment secrets.
+- Production authority is server-bound after authentication.
+- Caller-supplied authority headers cannot elevate permissions.
+- High-risk or irreversible actions require the applicable human approval gate.
+- Auditability and rollback are part of the Definition of Done.
 
-### Create agent
-
-```bash
-curl -X POST http://localhost:4000/agents \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: change-me" \
-  -d '{
-    "name": "verification-worker-1",
-    "type": "worker",
-    "capabilities": ["verify", "issue", "queue"]
-  }'
-```
-
-### Create task
-
-```bash
-curl -X POST http://localhost:4000/tasks \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: change-me" \
-  -d '{
-    "type": "verify-record",
-    "payload": {
-      "recordId": "abc-123"
-    }
-  }'
-```
-
-### Create workflow
-
-```bash
-curl -X POST http://localhost:4000/workflows \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: change-me" \
-  -d '{
-    "name": "QR-V Issue + Register",
-    "steps": ["issue", "sign", "register", "notify"]
-  }'
-```
-
-## Deployment Target
+## Deployment target
 
 Canonical domain:
 
 - `acc.onegodian.com`
 
-Legacy or secondary references such as `acc.quantumohi.com` should redirect to `acc.onegodian.com` unless a later infrastructure decision intentionally changes canonical routing.
+Canonical Oru surface:
+
+- `acc.onegodian.com/oru`
+
+OMOS reasoning platform:
+
+- `omos.onegodian.com`
+
+Legacy or secondary ACC references should redirect to `acc.onegodian.com` unless a later infrastructure decision intentionally changes canonical routing.
 
 Recommended runtime:
 
 - Node 20+
 - Redis 7
-- PostgreSQL 15
+- PostgreSQL 15+
 - PM2 or container runtime
 - Nginx reverse proxy
 
-## Production Direction
+## Documentation
 
-ACC should be developed as reusable infrastructure, not a one-off dashboard:
+- `AGENTS.md` — repository operating and authority rules
+- `docs/ORUVALEN-ACC-OPERATING-MODEL.md` — Oru / OMOS / ACC architecture
+- `docs/PRODUCTION-READINESS.md` — production readiness controls
+- `docs/canonical-deployment.md` — canonical domain and deployment mapping
+- `docs/UNIFIED-PLATFORM-ARCHITECTURE.md` — broader ACC platform architecture
 
-- No client-specific logic in core code
-- Configuration-driven console modules
-- Tenant-aware routing
-- Versioned service contracts
-- Replaceable execution adapters
-- Unified operator shell
-- Clear separation between interface, governance, execution, identity, and audit
+## Production direction
+
+ACC is reusable control-plane infrastructure, not a one-off dashboard:
+
+- configuration-driven console modules;
+- replaceable adapters;
+- versioned service contracts;
+- tenant-aware routing where required;
+- explicit human approval gates;
+- clear separation between intelligence, reasoning, execution, identity, and audit;
+- measurable outcomes and provenance for future Oru learning.
