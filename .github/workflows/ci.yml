@@ -41,7 +41,7 @@ jobs:
       - name: Production environment preflight contract
         env:
           NODE_ENV: production
-          ACC_VERSION: 1.2.0
+          ACC_VERSION: 1.3.0
           POSTGRES_URL: postgresql://acc:placeholder@db.example.invalid:5432/acc
           DATABASE_SSL: 'true'
           ALLOW_CORS_ORIGIN: https://acc.onegodian.com
