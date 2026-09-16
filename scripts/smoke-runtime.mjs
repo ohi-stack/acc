@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 
+const EXPECTED_ACC_VERSION = '1.3.0';
 const port = Number(process.env.ACC_SMOKE_PORT || 3199);
 const base = `http://127.0.0.1:${port}`;
 const child = spawn(process.execPath, ['dist/index.js'], {
@@ -7,7 +8,7 @@ const child = spawn(process.execPath, ['dist/index.js'], {
     ...process.env,
     NODE_ENV: 'test',
     PORT: String(port),
-    ACC_VERSION: '1.2.0',
+    ACC_VERSION: EXPECTED_ACC_VERSION,
     POSTGRES_URL: 'postgres://postgres:postgres@127.0.0.1:5432/acc-smoke',
     DATABASE_SSL: 'false',
     ALLOW_CORS_ORIGIN: 'http://127.0.0.1',
@@ -38,7 +39,7 @@ async function waitFor(path, expectedStatus = 200) {
 
 try {
   const health = await waitFor('/health');
-  if (health.service !== 'ACC' || health.version !== '1.2.0') throw new Error('health identity/version mismatch');
+  if (health.service !== 'ACC' || health.version !== EXPECTED_ACC_VERSION) throw new Error('health identity/version mismatch');
 
   const ready = await waitFor('/ready');
   if (ready.status !== 'ready') throw new Error(`runtime not ready: ${JSON.stringify(ready)}`);
