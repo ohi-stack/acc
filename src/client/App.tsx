@@ -4,6 +4,8 @@ import { Sidebar } from './components/Sidebar';
 import { CommandPalette } from './components/CommandPalette';
 import { DashboardView } from './views/DashboardView';
 import { CommandCenterView } from './views/CommandCenterView';
+import { OruValenView } from './views/OruValenView';
+import { OMOSView } from './views/OMOSView';
 import { AgentsView } from './views/AgentsView';
 import { TasksView } from './views/TasksView';
 import { WorkflowsView } from './views/WorkflowsView';
@@ -61,6 +63,12 @@ export const App: React.FC = () => {
     if (currentRoute.startsWith('/console/command')) {
       return <CommandCenterView onNavigate={navigate} onRefreshApprovals={refreshPendingApprovals} />;
     }
+    if (currentRoute.startsWith('/oruvalen')) {
+      return <OruValenView />;
+    }
+    if (currentRoute.startsWith('/omos')) {
+      return <OMOSView />;
+    }
     if (currentRoute.startsWith('/agents')) {
       return <AgentsView onNavigate={navigate} />;
     }
@@ -108,13 +116,11 @@ export const App: React.FC = () => {
     if (currentRoute.startsWith('/account')) {
       return <AccountView />;
     }
-    // Default to Dashboard
     return <DashboardView onNavigate={navigate} onRefreshApprovals={refreshPendingApprovals} />;
   };
 
   return (
     <div className="flex flex-col h-screen w-screen bg-[#070b14] text-slate-100 overflow-hidden">
-      {/* Global Top Bar */}
       <TopBar
         pendingApprovals={pendingApprovals}
         onNavigate={navigate}
@@ -122,22 +128,18 @@ export const App: React.FC = () => {
         systemStatus={systemStatus}
       />
 
-      {/* Main App Workspace */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Persistent Navigation */}
         <Sidebar
           currentRoute={currentRoute}
           onNavigate={navigate}
           pendingApprovals={pendingApprovals}
         />
 
-        {/* Dynamic View Area */}
         <main className="flex-1 bg-[#070b14] overflow-hidden">
           {renderCurrentView()}
         </main>
       </div>
 
-      {/* Global Command Palette (⌘K) */}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
