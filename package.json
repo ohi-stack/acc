@@ -1,7 +1,7 @@
 {
   "name": "@onegodian/acc",
   "version": "1.2.0",
-  "description": "ACC — unified OHI Command Console and Agent Command Console for governed systems, agents, workflows, runtime, identity, registry, audit, and integrations.",
+  "description": "ACC — unified OHI Command Console, Oru’Valen Twin Console, and Agent Command Console for governed systems, continuity/context, agents, workflows, runtime, identity, registry, audit, and integrations.",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -53,6 +53,7 @@
     "platform": "ACC",
     "consoles": [
       "ohi-command-console",
+      "oru-valen-twin-console",
       "agent-command-console"
     ]
   }
