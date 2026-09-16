@@ -1,4 +1,4 @@
-# ACC™ — OHI Command Console + Agent Command Console
+# ACC™ — OHI Command Console + Oru’Valen Twin Console + Agent Command Console
 
 ACC™ is the unified command console for the OneGodian operational stack.
 
@@ -6,26 +6,46 @@ Canonical production domain:
 
 - `acc.onegodian.com`
 
-ACC combines two first-class console modules inside one platform:
+ACC combines three first-class console modules inside one platform:
 
 1. **OHI Command Console** — OHI systems, governed execution, runtime status, registry visibility, identity, policy, audit, and service supervision.
-2. **Agent Command Console** — agents, tasks, queues, workflows, delegation, schedules, runtime activity, and automation operations.
+2. **Oru’Valen Twin Console** — personalized continuity/context, Lived Experience, Decision Memory, learning proposals, Current State review, and OMOS synchronization.
+3. **Agent Command Console** — agents, tasks, queues, workflows, delegation, schedules, runtime activity, and automation operations.
 
-These are not separate products and should not be deployed as competing dashboards. They are unified modules inside the same ACC control-plane interface.
+These are not separate competing dashboards. They are unified modules inside the same ACC control-plane interface.
+
+Oru’Valen is **not** classified as an AI agent and must not be merged into the external agent registry.
 
 ## Repository description
 
 Use this description on GitHub:
 
-> ACC™ — unified command console for OHI systems, governed execution, agents, workflows, automation, registry operations, identity, audit, and platform governance at acc.onegodian.com.
+> ACC™ — unified command console for OHI systems, Oru’Valen continuity/context, governed execution, agents, workflows, automation, registry operations, identity, audit, and platform governance at acc.onegodian.com.
 
-## Architectural Position
+## Architectural position
 
-ACC is the operator interface layer. It does not replace governance authority or execution authority.
+ACC is the operator and authorized execution control-plane interface. It does not replace human governance authority or the OMOS governed reasoning/Human Gate/Decision Record runtime.
 
-Authority flows through:
+Canonical Oru/OMOS/ACC loop:
 
-- OSCC™ — OHI Systems Command Center / governance control plane
+```text
+Human input or authorized evidence
+→ Oru context snapshot
+→ OMOS governed reasoning
+→ Council / synthesis
+→ Human Gate
+→ Decision Record
+→ ACC authorized execution
+→ Verification / audit
+→ Outcome
+→ Proposed Oru learning
+→ Human-approved memory/current-state update
+```
+
+Authority flows through the applicable governance and execution controls, including:
+
+- OMOS™ — governed reasoning, Council synthesis, Human Gate, Decision Records, persistence, and audit/history
+- OSCC™ — OHI Systems Command Center / governance control plane where applicable
 - OCP™ — policy and authorization layer
 - OEG™ — OHI Execution Gateway
 - Identity / JWT / RBAC services
@@ -38,6 +58,7 @@ ACC displays, routes, supervises, and controls approved workflows through govern
 - Express + TypeScript service
 - Unified ACC shell
 - OHI Command Console module
+- Oru’Valen Twin Console module
 - Agent Command Console module
 - Agent registry API
 - Task queue API with BullMQ
@@ -52,7 +73,7 @@ ACC displays, routes, supervises, and controls approved workflows through govern
 - PM2 ecosystem configuration
 - GitHub Actions CI
 
-## Console Modules
+## Console modules
 
 ### OHI Command Console
 
@@ -77,6 +98,36 @@ Suggested routes:
 - `/ohi/registry`
 - `/ohi/settings`
 
+### Oru’Valen Twin Console
+
+Purpose:
+
+- Surface approved Oru continuity/context
+- Present the Lived Experience architecture
+- Preserve Decision Memory and outcome-learning boundaries
+- Separate FACT / USER_STATEMENT / INFERENCE / PREDICTION
+- Review proposed learning before durable memory/current-state updates
+- Display OMOS and ACC synchronization/maturity status
+- Keep Oru separate from the external Agents registry
+
+Current route:
+
+- `/oru`
+
+Planned sub-surfaces may include:
+
+- `/oru/context`
+- `/oru/lived-experience`
+- `/oru/decisions`
+- `/oru/learning`
+- `/oru/current-state`
+- `/oru/connections`
+
+Canonical architecture and machine profile are defined by OMOS source targets:
+
+- `https://omos.onegodian.com/oru/`
+- `https://omos.onegodian.com/api/oru.json`
+
 ### Agent Command Console
 
 Purpose:
@@ -98,6 +149,19 @@ Suggested routes:
 - `/workflows/:id`
 - `/queues`
 - `/logs`
+
+## Oru learning and authority boundaries
+
+The Twin architecture is evidence- and approval-driven:
+
+- Lived Experience does not imply background surveillance.
+- Only user-supplied or explicitly authorized sources may contribute context.
+- Model inference and prediction do not become facts automatically.
+- Direct human correction has higher authority than a prior model inference about that human.
+- Historical records remain preserved; newer verified and approved state may supersede earlier current-state assumptions.
+- Restricted financial, health, legal, identity, and private-contact data require access controls.
+- High-risk external execution remains approval-gated.
+- Durable memory/current-state changes must be attributable, versioned, reviewable, and governed by the configured approval policy.
 
 ## Local development
 
@@ -168,7 +232,7 @@ curl -X POST http://localhost:4000/workflows \
   }'
 ```
 
-## Deployment Target
+## Deployment target
 
 Canonical domain:
 
@@ -184,7 +248,7 @@ Recommended runtime:
 - PM2 or container runtime
 - Nginx reverse proxy
 
-## Production Direction
+## Production direction
 
 ACC should be developed as reusable infrastructure, not a one-off dashboard:
 
@@ -194,4 +258,8 @@ ACC should be developed as reusable infrastructure, not a one-off dashboard:
 - Versioned service contracts
 - Replaceable execution adapters
 - Unified operator shell
-- Clear separation between interface, governance, execution, identity, and audit
+- Clear separation between interface, governance, execution, identity, continuity/context, and audit
+
+## Maturity rule
+
+Repository implementation, green CI, merge, deployment, and production proof are separate states. A capability must not be labeled Verified or Production until the relevant evidence exists on the canonical domain.
