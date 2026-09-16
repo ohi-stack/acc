@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Terminal, Bot, ListTodo, ShieldCheck, Cpu, Code2, Rocket, FileSpreadsheet, HeartPulse } from 'lucide-react';
+import { Search, Terminal, BrainCircuit, Bot, ListTodo, ShieldCheck, Cpu, Code2, Rocket, FileSpreadsheet, HeartPulse } from 'lucide-react';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -12,10 +12,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k' && isOpen) {
         e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle
+        onClose();
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -28,6 +27,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
   if (!isOpen) return null;
 
   const actions = [
+    { label: 'Open Oru’Valen Twin', icon: BrainCircuit, route: '/oru', cat: 'O-H-I Twin' },
     { label: 'Go to Command Center', icon: Terminal, route: '/console/command', cat: 'Navigation' },
     { label: 'Go to Dashboard', icon: Terminal, route: '/console/dashboard', cat: 'Navigation' },
     { label: 'Inspect Agents Registry', icon: Bot, route: '/agents', cat: 'Agents' },
