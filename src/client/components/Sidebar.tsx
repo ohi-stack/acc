@@ -2,6 +2,8 @@ import React from 'react';
 import {
   LayoutDashboard,
   Terminal,
+  Brain,
+  Network,
   Bot,
   ListTodo,
   GitFork,
@@ -33,6 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const mainNavItems = [
     { label: 'Dashboard', route: '/console/dashboard', icon: LayoutDashboard },
     { label: 'Command', route: '/console/command', icon: Terminal, highlight: true },
+    { label: 'Oru’Valen', route: '/oruvalen', icon: Brain, accent: 'purple' },
+    { label: 'OMOS', route: '/omos', icon: Network, accent: 'cyan' },
     { label: 'Agents', route: '/agents', icon: Bot },
     { label: 'Tasks', route: '/tasks', icon: ListTodo },
     { label: 'Workflows', route: '/workflows', icon: GitFork },
@@ -55,7 +59,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside className="w-64 bg-[#070b14] border-r border-[#1e293b] flex flex-col justify-between shrink-0 h-full select-none">
-      {/* Scrollable Navigation List */}
       <div className="flex-1 overflow-y-auto py-3 px-2.5 space-y-1">
         <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
           Control Plane
@@ -86,6 +89,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         : 'text-[#d4af37]'
                       : item.highlight
                       ? 'text-[#d4af37]/70 group-hover:text-[#d4af37]'
+                      : item.accent === 'purple'
+                      ? 'text-purple-400/70 group-hover:text-purple-300'
+                      : item.accent === 'cyan'
+                      ? 'text-cyan-400/70 group-hover:text-cyan-300'
                       : 'text-slate-400 group-hover:text-slate-300'
                   }`}
                 />
@@ -94,7 +101,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               </div>
 
-              {/* Badge for Approvals or Highlights */}
               {item.badge !== undefined && item.badge > 0 && (
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-amber-500 text-black font-bold animate-pulse">
                   {item.badge}
@@ -105,7 +111,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Bottom Section */}
       <div className="p-2.5 border-t border-[#1e293b] space-y-1 bg-[#070b14]/90">
         <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
           Console Meta
@@ -130,9 +135,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           );
         })}
 
-        {/* Small version stamp */}
         <div className="pt-2 px-3 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>ACC™ v1.2.0</span>
+          <span>ACC™ v1.3.0</span>
           <span>ONEGODIAN, LLC</span>
         </div>
       </div>
