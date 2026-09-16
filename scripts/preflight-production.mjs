@@ -7,12 +7,14 @@ const requireValue = (name) => {
   return value;
 };
 
+const EXPECTED_ACC_VERSION = '1.3.0';
+
 const nodeMajor = Number(process.versions.node.split('.')[0]);
 if (nodeMajor < 20 || nodeMajor >= 23) failures.push(`Node ${process.version} is outside supported range >=20 <23`);
 
 if (process.env.NODE_ENV !== 'production') failures.push('NODE_ENV must be production');
 const version = requireValue('ACC_VERSION');
-if (version && version !== '1.2.0') failures.push(`ACC_VERSION must be 1.2.0; received ${version}`);
+if (version && version !== EXPECTED_ACC_VERSION) failures.push(`ACC_VERSION must be ${EXPECTED_ACC_VERSION}; received ${version}`);
 
 const postgres = requireValue('POSTGRES_URL');
 if (postgres) {
