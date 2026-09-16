@@ -12,7 +12,7 @@ if (nodeMajor < 20 || nodeMajor >= 23) failures.push(`Node ${process.version} is
 
 if (process.env.NODE_ENV !== 'production') failures.push('NODE_ENV must be production');
 const version = requireValue('ACC_VERSION');
-if (version && version !== '1.2.0') failures.push(`ACC_VERSION must be 1.2.0; received ${version}`);
+if (version && version !== '1.3.0') failures.push(`ACC_VERSION must be 1.3.0; received ${version}`);
 
 const postgres = requireValue('POSTGRES_URL');
 if (postgres) {
