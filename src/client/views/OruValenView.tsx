@@ -7,7 +7,10 @@ import {
   ExternalLink,
   Layers3,
   FileCheck2,
-  UserRoundCheck
+  UserRoundCheck,
+  Workflow,
+  Scale,
+  CircleDot
 } from 'lucide-react';
 
 export const OruValenView: React.FC = () => {
@@ -35,6 +38,31 @@ export const OruValenView: React.FC = () => {
       description: 'Tracks what is true now while preserving older states as historical context rather than current fact.',
       icon: Layers3,
       status: 'Versioned'
+    },
+    {
+      title: 'Execution Intelligence',
+      description: 'Prepares approved work for ACC tasks, workflows, agents, tools, and deployments without bypassing authorization gates.',
+      icon: Workflow,
+      status: 'Permissioned'
+    }
+  ];
+
+  const evidenceClasses = [
+    {
+      title: 'FACT',
+      description: 'Evidence-supported record established by an approved source or verified system event.'
+    },
+    {
+      title: 'STATED POSITION',
+      description: 'An explicit human statement, preference, intention, correction, or decision at a recorded point in time.'
+    },
+    {
+      title: 'INFERENCE',
+      description: 'A pattern-derived conclusion that must retain supporting evidence and confidence instead of becoming fact.'
+    },
+    {
+      title: 'PREDICTION',
+      description: 'A forecast of likely preference or action. Prediction may support a recommendation but never becomes authority.'
     }
   ];
 
@@ -50,7 +78,7 @@ export const OruValenView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-slate-400 font-mono mt-1.5 max-w-3xl">
-            Oru’Valen is the OHI Twin that learns, remembers, reasons, and assists across the OneGodian ecosystem while remaining subordinate to authorized human judgment.
+            Oru’Valen is the O-H-I Twin that learns, remembers, reasons, and assists across the OneGodian ecosystem while remaining subordinate to authorized human judgment.
           </p>
         </div>
         <a
@@ -63,21 +91,39 @@ export const OruValenView: React.FC = () => {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
         {systems.map(({ title, description, icon: Icon, status }) => (
           <div key={title} className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2">
-                <Icon className="w-4 h-4 text-purple-400" />
+                <Icon className="w-4 h-4 text-purple-400 shrink-0" />
                 <h2 className="text-sm font-semibold text-slate-100">{title}</h2>
               </div>
-              <span className="text-[9px] font-mono uppercase tracking-wide text-slate-400 border border-[#26324a] rounded px-2 py-0.5">
-                {status}
-              </span>
             </div>
+            <span className="inline-flex mt-3 text-[9px] font-mono uppercase tracking-wide text-slate-400 border border-[#26324a] rounded px-2 py-0.5">
+              {status}
+            </span>
             <p className="mt-3 text-xs leading-relaxed text-slate-400">{description}</p>
           </div>
         ))}
+      </div>
+
+      <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Scale className="w-4 h-4 text-cyan-400" />
+          <h2 className="text-sm font-mono font-semibold text-slate-200">Evidence Discipline</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+          {evidenceClasses.map(({ title, description }) => (
+            <div key={title} className="rounded-lg bg-[#070b14] border border-[#1e293b] p-3">
+              <div className="flex items-center gap-2">
+                <CircleDot className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="text-[10px] font-mono font-bold tracking-wide text-cyan-300">{title}</span>
+              </div>
+              <p className="mt-2 text-[11px] leading-5 text-slate-400">{description}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -101,6 +147,9 @@ export const OruValenView: React.FC = () => {
           <div className="font-mono text-[11px] leading-7 text-slate-300">
             LIVE → CAPTURE → VERIFY → CLASSIFY → REMEMBER → DETECT PATTERNS → PREDICT → RECOMMEND → ACT WITH AUTHORITY → MEASURE → LEARN
           </div>
+          <p className="mt-3 text-[11px] leading-5 text-slate-400">
+            Corrections and measured outcomes update the current-state model; inference and prediction remain distinct from verified fact.
+          </p>
         </div>
       </div>
     </div>
