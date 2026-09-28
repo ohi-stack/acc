@@ -19,6 +19,15 @@ if (postgres) {
   if (!/^postgres(?:ql)?:\/\//i.test(postgres)) failures.push('POSTGRES_URL must be PostgreSQL');
   if (/(?:localhost|127\.0\.0\.1)/i.test(postgres)) failures.push('POSTGRES_URL must not point to a local database in production');
 }
+const redis = requireValue('REDIS_URL');
+if (redis) {
+  if (!/^rediss?:\/\//i.test(redis)) failures.push('REDIS_URL must use redis:// or rediss://');
+  if (/(?:localhost|127\.0\.0\.1)/i.test(redis)) failures.push('REDIS_URL must not point to a local Redis instance in production');
+}
+const dbTlsValidation = requireValue('ACC_DB_SSL_REJECT_UNAUTHORIZED');
+if (String(process.env.DATABASE_SSL || '').toLowerCase() === 'true' && dbTlsValidation.toLowerCase() !== 'true') {
+  failures.push('ACC_DB_SSL_REJECT_UNAUTHORIZED must be true when DATABASE_SSL is enabled');
+}
 
 const apiKey = requireValue('API_KEY');
 if (apiKey && apiKey.length < 24) failures.push('API_KEY must contain at least 24 characters');
