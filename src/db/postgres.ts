@@ -25,7 +25,7 @@ export async function getDatabase(): Promise<DatabaseClient> {
       logger.info('Connecting to configured remote PostgreSQL');
       const pool = new Pool({
         connectionString: env.POSTGRES_URL,
-        ssl: env.DATABASE_SSL ? { rejectUnauthorized: false } : false,
+        ssl: env.DATABASE_SSL ? { rejectUnauthorized: env.ACC_DB_SSL_REJECT_UNAUTHORIZED } : false,
         max: Number(process.env.ACC_DB_POOL_MAX || 10),
         connectionTimeoutMillis: Number(process.env.ACC_DB_CONNECT_TIMEOUT_MS || 10000),
         idleTimeoutMillis: 30000
