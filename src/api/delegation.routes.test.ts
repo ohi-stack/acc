@@ -48,3 +48,10 @@ test('work order status API accepts only canonical states', () => {
   assert.equal(workOrderStatusSchema.parse({ status: 'AWAITING_APPROVAL' }).status, 'AWAITING_APPROVAL');
   assert.throws(() => workOrderStatusSchema.parse({ status: 'DONE' }));
 });
+
+test('status endpoint cannot self-assert human approval', () => {
+  assert.throws(() => workOrderStatusSchema.parse({
+    status: 'COMPLETED',
+    approvalSatisfied: true
+  }));
+});
