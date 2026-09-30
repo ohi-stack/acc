@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+let worker;
+async function call(path, identity=true, options={}) {
+  worker??=(await import('../dist/server/index.js')).default;
+  return worker.fetch(new Request('https://acc.test'+path,{...options,headers:{accept:'text/html',...(identity?{'oai-authenticated-user-email':'onegodianone@gmail.com'}:{}),...options.headers}}),{ASSETS:{fetch:async()=>new Response('Not found',{status:404})}},{waitUntil(){},passThroughOnException(){}});
+}
+test('root resolves to canonical operator dashboard',async()=>{const response=await call('/');assert.equal(response.status,307);assert.match(response.headers.get('location'),/\/console\/dashboard/);});
+test('operator dashboard is authenticated and renders all ten KPI cards',async()=>{const response=await call('/console/dashboard');assert.equal(response.status,200);const html=await response.text();for(const text of ['Active Projects','Active Responsibilities','Open Work Orders','Work Orders Running','Awaiting Human Approval','Blocked Work','Failed Executions','Deployments Pending Verification','Provider Health','System Health','Needs My Attention','Persistent Responsibilities'])assert.ok(html.includes(text),text);assert.ok(html.includes('v1.3.0'));});
+test('unauthenticated operator page redirects to platform sign in',async()=>{const response=await call('/work-orders',false);assert.equal(response.status,307);assert.match(response.headers.get('location'),/signin-with-chatgpt/);});
+test('reserved Dot is never claimed executable in rendered registry',async()=>{const response=await call('/delegation/providers');assert.equal(response.status,200);assert.ok((await response.text()).includes('Reserved Provider — Execution Not Available'));});
+test('all preserved operator routes render',async()=>{for(const path of ['/projects','/projects/proj-test','/responsibilities','/responsibilities/resp-test','/work-orders','/work-orders/wo-test','/delegation','/agents','/tasks','/workflows','/executions','/approvals','/deployments','/verification','/audit','/models','/oruvalen','/omos','/connections','/engineering-council','/status','/docs','/settings','/account','/console/command']){const response=await call(path);assert.equal(response.status,200,path);}});
+test('API rejects unauthenticated caller',async()=>{const response=await call('/api/v1/work-orders',false);assert.equal(response.status,401);});
+test('API rejects non-allowlisted authenticated caller',async()=>{const response=await call('/api/v1/work-orders',false,{headers:{'oai-authenticated-user-email':'observer@example.test'}});assert.equal(response.status,403);});
+test('missing runtime evidence is degraded rather than fake production data',async()=>{const response=await call('/api/v1/work-orders');assert.equal(response.status,503);assert.equal((await response.json()).code,'RUNTIME_UNCONFIGURED');});
+test('generic work status updates and unknown endpoints fail closed',async()=>{for(const path of ['/api/v1/work-orders/wo-test/status','/api/v1/providers/invoke']){const response=await call(path,true,{method:'POST',headers:{origin:'https://acc.test'},body:'{}'});assert.equal(response.status,405,path);}});
+test('approval decisions reject cross-origin requests',async()=>{const response=await call('/api/v1/approvals/ap-test/decide',true,{method:'POST',headers:{origin:'https://other.test'},body:JSON.stringify({decision:'APPROVED',reason:'reviewed'})});assert.equal(response.status,403);});

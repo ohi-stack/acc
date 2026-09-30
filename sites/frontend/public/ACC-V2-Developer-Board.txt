@@ -1,0 +1,77 @@
+ACC™ Platform — Updated Developer Task Board
+Target acc.onegodian.com | ACC V2 2.0.0-alpha.1 | Production baseline v1.3.0
+September 30, 2026
+
+Status legend: FRONTEND = implemented UI; CONTRACT = wired to a foundation API endpoint, production connection pending; GAP = canonical backend work required. No entry is marked production-complete without end-to-end evidence.
+
+P0 CORE
+FRONTEND: Projects → Responsibilities → Work Orders → Delegation → Execution → Approval → Verification → Deployment → Audit.
+FRONTEND: /projects, /projects/:id, /responsibilities, /responsibilities/:id, /work-orders, /work-orders/:id, /delegation, /delegation/providers.
+FRONTEND: preserve /agents /tasks /workflows /executions /approvals /deployments /verification /audit /models /oruvalen /omos /connections /engineering-council /status /docs /settings /account /console/dashboard /console/command.
+GAP: first-class Projects CRUD, metadata and project association on all execution records. Current project index derives persisted project references.
+
+P0 DASHBOARD
+FRONTEND: all ten requested KPI cards; Needs My Attention, Active Work, Persistent Responsibilities, Recent Results. Unknown when unavailable; no seeded production activity.
+CONTRACT: read existing ACC collections through authenticated server-only proxy.
+GAP: authoritative active project status, provider runtime health and cross-resource correlation.
+
+P0 WORK ORDERS
+FRONTEND + CONTRACT: list/search/status filter, inspect all requested fields and submit PLANNED record with objective, project, responsibility, context, requester bound by backend, assignee, provider, executor, risk, approval requirement, tools, files, dependencies, schedule and trigger.
+FRONTEND: artifacts, verification, deployment evidence, timestamps and canonical status display.
+SAFETY: no frontend approval assertion or generic status write.
+GAP: automatic execution orchestration and correlated event/evidence lifecycle.
+
+P0 RESPONSIBILITIES
+FRONTEND + CONTRACT: list/detail/create DRAFT ownership records; owner, preferred provider, description, cadence, triggers, approval requirement, timestamps, related Work Orders.
+FRONTEND: production-health, ARE pipeline, ALLATYME readiness and engineering monitoring examples clearly labeled templates.
+GAP: scheduler materialization, next execution and governed lifecycle controls beyond create/list.
+
+P0 PROVIDERS
+FRONTEND + CONTRACT: canonical eight-provider registry. Provider ID/name/class/capability/executable/maturity/connection/health/activity/types/approval fields.
+SAFETY: no identifier-based Operational claim; unknown provider fails closed; openai-dot remains Reserved Provider — Execution Not Available.
+GAP: capability matching, live availability and adapter health evidence.
+
+P0 PROJECT CONTROL CENTER
+FRONTEND: Overview, Responsibilities, Work Orders, Agents, Workflows, Executions, Approvals, Artifacts, Deployments, Verification, Audit, Connections, Settings tabs.
+FRONTEND: scope by recorded project_id. Unknown purpose/settings until backend exists.
+GAP: first-class metadata, normalized project correlation and authoritative deployment counts.
+
+P1 DELEGATION
+FRONTEND: visual flow and inspector for requested/selected provider, capability match, availability, authorization, fallback and target.
+GAP: persisted selection evidence from governed runtime. Unknown values never fabricated.
+
+P1 APPROVALS
+FRONTEND + CONTRACT: approval evidence cards; Approve/Reject separate endpoint with required reason, no optimistic approval. Request Changes visibly unavailable.
+GAP: Request Changes decision endpoint, immutable separate decision records, Work Order correlation, transactional concurrency guarantees and approval satisfaction integration.
+
+P1 ORU’VALEN
+FRONTEND: proposed work/responsibilities, context, decisions, outcome, learning, human accepted/rejected areas; OruValen Guide.txt; human authority chain.
+GAP: authenticated integration data, proposal acceptance and learning decisions.
+
+P1 OMOS
+FRONTEND: runtime, reasoning, Decision Records, context, routing, Human Gate, Work Order, result and evidence areas.
+GAP: connected API and provenance, runtime and decision evidence.
+
+P1 ENGINEERING COUNCIL
+FRONTEND: Issue → Engineering Work Order → assignment → implementation → PR → review → tests → Human Approval → merge → deploy → production verification.
+SAFETY: no merged-PR completion claim.
+GAP: structured engineering types, GitHub linkage, automated test/deployment correlation and verified release transitions.
+
+P1 CONNECTIONS
+FRONTEND + CONTRACT: Model / Data / Action / Environment classes; full required fields; unknown classifications retained as unclassified.
+GAP: adapter-specific permission and verification fields not yet provided by backend.
+
+P1 AUDIT
+FRONTEND + CONTRACT: audit collection and complete correlation-field inspection.
+FRONTEND: required Work Order trace stages clearly marked as contract rather than asserted events.
+GAP: real correlated Created → Validated → Authorized → Queued → Assigned → Executed → Tool Calls → Output → Approval → Verification → Deployment → Final Status timeline.
+
+P2 NAVIGATION / UX / PRODUCTION
+FRONTEND: seven consistent operator navigation groups; responsive desktop/tablet/mobile; keyboard focus, native dialog trapping, accessible labels; separate provider/work maturity chips; loading/empty/error/unauthorized/degraded states.
+SAFETY: preserve /api/v1 authentication; server-side allowlist and secrets; no frontend credentials or caller authority headers; no replacement database; canonical PostgreSQL retained, no PGlite production.
+DOCUMENTED: source parity, build, release and rollback runbook; prior Sites version rollback; no database migration in this change.
+GAP: production credentials, canonical-domain binding/deployment verification and complete cross-provider runtime acceptance.
+
+DEFINITION OF DONE
+Implemented → Connected → Tested → Documented → Repeatable → Built → Deployed → Verified on acc.onegodian.com → Rollback-capable.
+Only the verified operational scope belongs to the current production version.
