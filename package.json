@@ -1,7 +1,7 @@
 {
   "name": "@onegodian/acc",
-  "version": "1.3.0",
-  "description": "ACC — unified OHI Command Console and Agent Command Console for governed systems, Oru’Valen intelligence-twin support, OMOS integration, agents, workflows, runtime, identity, registry, audit, and integrations.",
+  "version": "2.0.0-alpha.1",
+  "description": "ACC — provider-independent OneGodian command and delegation control plane for projects, responsibilities, work orders, governed execution, Oru’Valen, OMOS, agents, workflows, approvals, verification, deployment evidence, and audit.",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -52,7 +52,8 @@
   "onegodian": {
     "canonicalDomain": "acc.onegodian.com",
     "platform": "ACC",
-    "version": "1.3.0",
+    "version": "2.0.0-alpha.1",
+    "releaseStatus": "pre-release",
     "consoles": [
       "ohi-command-console",
       "agent-command-console",
