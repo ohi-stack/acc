@@ -45,9 +45,8 @@ export const workOrderStatusSchema = z.object({
   status: z.enum([
     'PLANNED', 'READY', 'BLOCKED', 'QUEUED', 'RUNNING',
     'AWAITING_APPROVAL', 'COMPLETED', 'FAILED', 'CANCELLED'
-  ]),
-  approvalSatisfied: z.boolean().optional()
-});
+  ])
+}).strict();
 
 export function providerCatalog() {
   return EXECUTION_PROVIDERS.map(provider => ({ ...provider }));
@@ -101,7 +100,7 @@ delegationRouter.post('/work-orders/:id/status', async (req, res, next) => {
     const data = await delegationService.updateWorkOrderStatus(
       req.params.id,
       parsed.status,
-      parsed.approvalSatisfied ?? false
+      false
     );
     res.json({ success: true, data });
   } catch (error) {
