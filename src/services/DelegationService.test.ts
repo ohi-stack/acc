@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  DELEGATION_SCHEMA_STATEMENTS,
   assertDispatchableProvider,
   canTransitionWorkOrder,
   normalizeWorkOrderInput
@@ -44,4 +45,12 @@ test('preserves the human gate for privileged work before completion', () => {
   assert.equal(canTransitionWorkOrder('RUNNING', 'COMPLETED', true, false), false);
   assert.equal(canTransitionWorkOrder('RUNNING', 'AWAITING_APPROVAL', true, false), true);
   assert.equal(canTransitionWorkOrder('AWAITING_APPROVAL', 'COMPLETED', true, true), true);
+});
+
+test('declares idempotent persistence for responsibilities and work orders', () => {
+  const schema = DELEGATION_SCHEMA_STATEMENTS.join('\n');
+  assert.match(schema, /CREATE TABLE IF NOT EXISTS responsibilities/i);
+  assert.match(schema, /CREATE TABLE IF NOT EXISTS work_orders/i);
+  assert.match(schema, /idx_work_orders_status/i);
+  assert.match(schema, /idx_responsibilities_status/i);
 });
