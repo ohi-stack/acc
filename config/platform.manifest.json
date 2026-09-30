@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "platform": {
+    "id": "acc",
+    "name": "ACC™",
+    "canonicalDomain": "acc.onegodian.com",
+    "apiDomain": "api.acc.onegodian.com",
+    "version": "0.2.0",
+    "modules": [
+      {
+        "id": "ohi-command",
+        "name": "OHI Command Console",
+        "basePath": "/ohi",
+        "capabilities": [
+          "service-health",
+          "execution-monitoring",
+          "governance-state",
+          "policy-state",
+          "identity-visibility",
+          "registry-visibility",
+          "audit-visibility",
+          "governed-dispatch"
+        ]
+      },
+      {
+        "id": "agent-command",
+        "name": "Agent Command Console",
+        "basePath": "/agents",
+        "capabilities": [
+          "agent-registry",
+          "capability-management",
+          "task-management",
+          "workflow-management",
+          "queue-supervision",
+          "schedule-monitoring",
+          "retry-management",
+          "runtime-logging"
+        ]
+      }
+    ],
+    "contract": [
+      "intake",
+      "validate",
+      "execute",
+      "verify",
+      "log",
+      "output"
+    ],
+    "tenantAware": true,
+    "humanAuthorization": true,
+    "replaceableAdapters": true
+  },
+  "repositoryRoles": {
+    "ohi-stack/acc": "canonical-shell",
+    "ohi-stack/acc-web": "web-interface",
+    "ohi-stack/acc-api": "api-surface",
+    "ohi-stack/acc-core": "domain-contracts",
+    "ohi-stack/acc-auth": "identity-authorization",
+    "ohi-stack/acc-db": "persistence-migrations",
+    "ohi-stack/acc-logs": "append-only-audit",
+    "ohi-stack/acc-runner": "execution-runtime",
+    "ohi-stack/acc-workflows": "workflow-definitions",
+    "ohi-stack/acc-adapters": "external-adapters",
+    "ohi-stack/acc-infra": "deployment-infrastructure",
+    "ohi-stack/acc-wp-adapter": "wordpress-bridge"
+  }
+}
