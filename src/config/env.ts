@@ -9,13 +9,14 @@ const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
   APP_NAME: z.string().default('acc'),
-  ACC_VERSION: z.string().default('1.2.0'),
+  ACC_VERSION: z.string().default('1.3.0'),
   LOG_LEVEL: z.string().default('info'),
   REDIS_URL: z.string().default('redis://localhost:6379'),
   POSTGRES_URL: z.string().default('postgres://postgres:postgres@localhost:5432/acc'),
   DATABASE_SSL: z.string().default('false').transform((v: string) => v === 'true'),
+  ACC_DB_SSL_REJECT_UNAUTHORIZED: z.string().default('true').transform((v: string) => v !== 'false'),
   QUEUE_NAME: z.string().default('acc-tasks'),
-  ALLOW_CORS_ORIGIN: z.string().default('*'),
+  ALLOW_CORS_ORIGIN: z.string().default('http://localhost:3000'),
   API_KEY: z.string().default(''),
   ACC_OPERATOR_ID: z.string().default('local-operator'),
   ACC_OPERATOR_ROLE: AuthorityRoleSchema.default('acc_operator'),
@@ -26,6 +27,13 @@ const EnvSchema = z.object({
   const localPostgres = /(?:localhost|127\.0\.0\.1)/i.test(value.POSTGRES_URL);
   if (!/^postgres(?:ql)?:\/\//i.test(value.POSTGRES_URL) || localPostgres) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['POSTGRES_URL'], message: 'Production requires a non-local PostgreSQL URL.' });
+  }
+  if (value.DATABASE_SSL && !value.ACC_DB_SSL_REJECT_UNAUTHORIZED) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['ACC_DB_SSL_REJECT_UNAUTHORIZED'], message: 'Production PostgreSQL TLS must validate server certificates.' });
+  }
+  const localRedis = /(?:localhost|127\.0\.0\.1)/i.test(value.REDIS_URL);
+  if (!/^rediss?:\/\//i.test(value.REDIS_URL) || localRedis) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['REDIS_URL'], message: 'Production requires a non-local Redis URL.' });
   }
   if (value.ALLOW_CORS_ORIGIN.trim() === '*') {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['ALLOW_CORS_ORIGIN'], message: 'Production CORS origin cannot be wildcard.' });

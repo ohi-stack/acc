@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: acc-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -24,7 +28,7 @@ jobs:
           node-version: 20
 
       - name: Install
-        run: npm install
+        run: npm install --no-audit --no-fund
 
       - name: Type check
         run: npm run check
@@ -38,12 +42,17 @@ jobs:
       - name: Production API authentication contract
         run: npm run test:auth
 
+      - name: Dependency audit (high severity)
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Production environment preflight contract
         env:
           NODE_ENV: production
           ACC_VERSION: 1.3.0
           POSTGRES_URL: postgresql://acc:placeholder@db.example.invalid:5432/acc
           DATABASE_SSL: 'true'
+          ACC_DB_SSL_REJECT_UNAUTHORIZED: 'true'
+          REDIS_URL: redis://redis.example.invalid:6379
           ALLOW_CORS_ORIGIN: https://acc.onegodian.com
           API_KEY: ci-production-contract-key-000000000001
           ACC_OPERATOR_ID: ci-operator

@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 import { v1Router } from './api/v1.routes';
 import { errorHandler } from './middleware/error-handler';
 import { apiAuth } from './middleware/api-auth';
@@ -10,14 +11,41 @@ import { postgresHealth } from './db/postgres';
 
 export function createApp() {
   const app = express();
+  app.disable('x-powered-by');
+
+  const allowedOrigins = new Set(env.ALLOW_CORS_ORIGIN.split(',').map(origin => origin.trim()).filter(Boolean));
+  app.use((req: Request, res: Response, next) => {
+    const requestIdHeader = String(req.header('x-request-id') || '').trim();
+    const requestId = /^[A-Za-z0-9._:-]{1,128}$/.test(requestIdHeader) ? requestIdHeader : crypto.randomUUID();
+    (req as Request & { requestId?: string }).requestId = requestId;
+    res.setHeader('x-request-id', requestId);
+
+    const origin = req.header('origin');
+    if (origin) {
+      if (!allowedOrigins.has(origin)) {
+        res.status(403).json({ error: 'cors_origin_not_allowed', requestId });
+        return;
+      }
+      res.setHeader('access-control-allow-origin', origin);
+      res.setHeader('access-control-allow-credentials', 'true');
+      res.setHeader('vary', 'Origin');
+    }
+    if (req.method === 'OPTIONS') {
+      res.setHeader('access-control-allow-methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+      res.setHeader('access-control-allow-headers', 'Authorization,Content-Type,X-ACC-Key,X-Request-Id');
+      res.status(204).end();
+      return;
+    }
+    next();
+  });
 
   app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
   }));
 
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: '1mb' }));
+  app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
   const publicDir = path.resolve(process.cwd(), 'public');
   app.use(express.static(publicDir));
