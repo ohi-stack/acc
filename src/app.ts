@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
 import { v1Router } from './api/v1.routes';
+import { delegationRouter } from './api/delegation.routes';
 import { errorHandler } from './middleware/error-handler';
 import { apiAuth } from './middleware/api-auth';
 import { env } from './config/env';
@@ -58,6 +59,7 @@ export function createApp() {
   // The operational API is private. Production identity/role is bound to the
   // server-side API key configuration and cannot be elevated by request headers.
   app.use('/api/v1', apiAuth, v1Router);
+  app.use('/api/v1', apiAuth, delegationRouter);
 
   const spaRoutes = [
     '/',
@@ -66,6 +68,12 @@ export function createApp() {
     '/agents/*',
     '/tasks',
     '/tasks/*',
+    '/work-orders',
+    '/work-orders/*',
+    '/responsibilities',
+    '/responsibilities/*',
+    '/delegation',
+    '/delegation/*',
     '/workflows',
     '/workflows/*',
     '/engineering-council',
