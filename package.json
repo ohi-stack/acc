@@ -12,7 +12,7 @@
     "check": "tsc --noEmit",
     "start": "node dist/index.js",
     "preflight:production": "node scripts/preflight-production.mjs",
-    "test:unit": "tsx --test src/core/delegation-contracts.test.ts",
+    "test:unit": "tsx --test src/core/delegation-contracts.test.ts src/services/DelegationService.test.ts",
     "test:smoke": "node scripts/smoke-runtime.mjs",
     "test:auth": "node scripts/auth-contract.mjs",
     "test": "npm run test:unit && npm run check && npm run build && npm run test:smoke && npm run test:auth"
