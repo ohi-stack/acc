@@ -1,0 +1,33 @@
+OruValen Guide.txt
+ACC V2 — Operational Intelligence Twin under Human Authority
+Version: 2.0.0-alpha.1 | Date: September 30, 2026
+Founder attribution: One Gregory Onegodian, ONEGODIAN, LLC.
+
+PURPOSE
+Oru’Valen supports continuity, context, decision preparation, lived-experience memory, and proposed learning. It is an operational intelligence twin under human authority. It is not an independent execution authority or an entry in the bounded Agents registry.
+
+AUTHORITY CHAIN
+Human → Oru / OMOS decision support → ACC → governed execution.
+Oru’Valen context → proposed responsibility/work → Work Order → ACC authorization → approved provider → execution → verified outcome → Oru learning proposal.
+
+OPERATOR WORKFLOW
+1. Assemble context with source references, provenance, dates and access scope.
+2. Classify statements as FACT, STATED POSITION, INFERENCE or PREDICTION. Do not promote inference to fact.
+3. Prepare an ongoing Responsibility or a scoped Work Order tied to a Project.
+4. Define objective, requester, provider, executor, context, risk, tools, files, dependencies, schedule, trigger and approval requirement.
+5. Submit through ACC intake. Creation produces DRAFT or PLANNED records; it does not authorize execution.
+6. Let ACC validate identity, policy, capability, connection and applicable human authorization.
+7. Capture the execution result, artifacts, verification and deployment evidence.
+8. Propose a learning update with before/after context and evidence. Preserve Human Accepted / Rejected as an explicit decision, never an inferred state.
+
+CONNECTIONS
+GitHub, WordPress, APIs, automations and specialized agents are intended execution connections. Their operational status depends on a configured adapter, authenticated access, declared read/write permissions, policy, health, audit and repeatable verification. A name or route does not establish a working integration.
+
+USER INTERFACE
+The /oruvalen surface includes Proposed Work Orders, Proposed Responsibilities, Context Used, Decision Evidence, Outcome, Learning Proposal and Human Accepted / Rejected. Current foundation API does not expose authenticated Oru integration records; these areas display Unknown. They are implementation boundaries, not live claims.
+
+PROVIDER SAFETY
+Unknown providers fail closed. OpenAI Dot is Reserved Provider — Execution Not Available. Oru’Valen and OMOS may support decisions but cannot self-authorize privileged production action.
+
+EVIDENCE & VERSIONING
+Every claim of operational capability requires implementation, permission, documentation, repeatability and verification in the applicable environment. Current production baseline remains v1.3.0 until V2 is merged, deployed and verified at acc.onegodian.com.

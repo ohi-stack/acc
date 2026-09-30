@@ -1,0 +1,51 @@
+ACC V2 Sites — Integration, Release and Rollback Runbook
+September 30, 2026 | Prerelease 2.0.0-alpha.1
+
+TARGETS
+Canonical ACC: https://acc.onegodian.com
+Sites: existing owner-private OHI Command Center project.
+No custom domain is attached to this Sites project as of inspection. Publishing the Sites frontend does not replace the canonical ACC server or certify ACC V2 production.
+
+SOURCE OF TRUTH
+ACC API contract: ohi-stack/acc, feat/acc-v2-delegation-foundation, fd2f4604fcb7c8c7c4b8e98fa65562ee4bd664a7.
+Frontend: Sites source repository, mirrored under sites/frontend in the corresponding ACC integration branch. Preserve source commit parity when releasing.
+
+SERVER CONFIGURATION
+ACC_API_ORIGIN: trusted HTTPS origin of the governed V2 ACC API, without a path.
+ACC_API_KEY: secret matching the backend production API_KEY. Never use NEXT_PUBLIC_ credentials. Never paste into browser settings or source.
+ACC_OPERATOR_EMAILS: comma-separated server-controlled operator allowlist; defaults to the existing Sites owner email. Sites audience policy remains owner-only.
+Backend must run production API authentication, server-bound ACC_OPERATOR_ID/ACC_OPERATOR_ROLE, PostgreSQL, and audited approval decisions. The proxy never forwards caller role or actor headers. Sites identity does not supply backend authority. The key binds operations to the backend configured actor; per-human identity mapping is a further production requirement if expanding beyond one operator.
+No credentials were configured during this frontend update. All runtime data remains Unknown until configured and verified.
+
+SUPPORTED FOUNDATION OPERATIONS
+Read: work-orders, work-orders/:id, responsibilities, execution-providers, agents, tasks, workflows, executions, approvals, deployments, verification, audit, connections, health.
+Create: POST work-orders, POST responsibilities.
+Approval: POST approvals/:id/decide, APPROVED or REJECTED with reason. The separate backend endpoint owns the authoritative audit record. It currently links task/execution rather than Work Order.
+Blocked: generic Work Order status update, provider invoke, direct dispatch, deployment changes, unrecognized routes, unknown providers, caller approval assertions and role elevation.
+
+REPEATABLE BUILD
+npm run install:ci (one bounded locked install)
+npx tsc --noEmit
+npm run lint
+npm test (build, artifact validation, governance and Worker route/auth tests)
+Push tested source commit to the Sites configured remote branch.
+Package dist with its .openai/hosting.json; save the version using the exact pushed SHA.
+Deploy the saved version with owner-private operation. Preserve audience.
+Inspect deployment status; verify dashboard, providers, Work Orders, Responsibilities, guides, API unauthorized response and degraded-state behavior.
+Record version ID, commit SHA, build result and live checks.
+
+CANONICAL RELEASE GATES
+Merge approved V2 source after required review/checks. Back up PostgreSQL and existing release artifacts. Confirm migrations and rollback feasibility. Configure the authenticated production runtime. Verify creation → authorization → provider → approval → execution → verification → deployment → audit at acc.onegodian.com. Validate desktop/mobile accessibility and loading/empty/error/unauthorized/degraded states. A merged PR alone is not completion.
+
+ROLLBACK
+Previous Sites publication is version 2; source commit 9235b9930dd9dfbe829da5f88bd58e489696af91. List versions and use its exact saved ID to redeploy; never invent IDs. Reconcile access policy and deployment status. Retain the old source SHA from the pre-change source checkout in release evidence. This frontend introduces no database migrations or replacement persistence. If runtime integration fails, remove/disable the frontend API connection and retain Unknown states; never weaken authentication. Canonical ACC rollback uses the verified v1.3.0 release, prior server environment and PostgreSQL backup per canonical deployment runbook.
+
+DONE
+Implemented → Connected → Tested → Documented → Repeatable → Built → Deployed → Verified on acc.onegodian.com → Rollback-capable.
+The frontend may be deployed while remaining prerelease; this does not advance the operational ACC version.
+
+REVIEWED BACKEND LIMITATIONS
+The inspected V2 source seeds initial deployment records and includes simulated Engineering Council stages. Registry rows, maturity labels, merged SHAs and uncorrelated verification_evidence do not prove a deployment. Frontend verified-result selection requires explicit verification with evidence or the latest matching deployment verification record. Canonical release must replace seeded/simulated production behavior with repeatable runtime evidence. Health cards report the authenticated backend response; they are not independent certification.
+
+ROLLBACK VERSION ID
+appgprj_6a6b8ec4624c819184b7c57d0645e131~appgver_ec84366ea2748191a5ef6fa643016c4c (Sites saved version 2, confirmed September 30, 2026).
