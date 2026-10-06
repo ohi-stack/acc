@@ -12,7 +12,7 @@ if (nodeMajor < 20 || nodeMajor >= 23) failures.push(`Node ${process.version} is
 
 if (process.env.NODE_ENV !== 'production') failures.push('NODE_ENV must be production');
 const version = requireValue('ACC_VERSION');
-if (version && version !== '1.3.0') failures.push(`ACC_VERSION must be 1.3.0; received ${version}`);
+if (version && version !== '1.4.0') failures.push(`ACC_VERSION must be 1.4.0; received ${version}`);
 
 const postgres = requireValue('POSTGRES_URL');
 if (postgres) {
@@ -37,14 +37,14 @@ for (const artifact of ['dist/index.js', 'dist/db/schema.sql', 'public/bundle.js
 }
 
 if (failures.length) {
-  console.error('ACC production preflight FAILED');
+  console.error('OHI-ACC production preflight FAILED');
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
 
 console.log(JSON.stringify({
   status: 'PASS',
-  service: 'ACC',
+  service: 'OHI-ACC',
   version,
   node: process.version,
   productionDatabase: 'configured-remote-postgresql',

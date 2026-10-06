@@ -25,7 +25,7 @@ export function createApp() {
   app.get(['/health', '/healthz'], (_req: Request, res: Response) => {
     res.status(200).json({
       status: 'ok',
-      service: 'ACC',
+      service: 'OHI-ACC',
       version: env.ACC_VERSION,
       environment: env.NODE_ENV,
       timestamp: new Date().toISOString()
@@ -39,7 +39,7 @@ export function createApp() {
     const ready = database.status === 'Healthy' && remoteSatisfied;
     res.status(ready ? 200 : 503).json({
       status: ready ? 'ready' : 'not_ready',
-      service: 'ACC',
+      service: 'OHI-ACC',
       version: env.ACC_VERSION,
       environment: env.NODE_ENV,
       dependencies: { database },
@@ -50,7 +50,7 @@ export function createApp() {
 
   app.get('/api/health', (_req, res) => res.json({
     status: 'healthy',
-    service: 'ACC',
+    service: 'OHI-ACC',
     version: env.ACC_VERSION,
     environment: env.NODE_ENV
   }));
@@ -96,7 +96,7 @@ export function createApp() {
     if (fs.existsSync(indexPath)) {
       res.sendFile(indexPath);
     } else {
-      res.status(503).send('<!DOCTYPE html><html><body><div id="root">ACC client bundle is unavailable.</div></body></html>');
+      res.status(503).send('<!DOCTYPE html><html><body><div id="root">OHI-ACC client bundle is unavailable.</div></body></html>');
     }
   };
 

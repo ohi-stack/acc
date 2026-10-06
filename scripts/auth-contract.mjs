@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'production';
-process.env.ACC_VERSION = '1.2.0';
+process.env.ACC_VERSION = '1.4.0';
 process.env.POSTGRES_URL = 'postgresql://acc:placeholder@db.example.invalid:5432/acc';
 process.env.DATABASE_SSL = 'true';
 process.env.ALLOW_CORS_ORIGIN = 'https://acc.onegodian.com';

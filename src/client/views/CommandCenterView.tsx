@@ -71,7 +71,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
           </span>
         </h1>
         <p className="text-xs text-slate-400 font-mono mt-1">
-          Submit high-level operational objectives. ACC analyzes risk, classifies policies, assigns governed agents, and presents structured pre-flight plans before execution.
+          Submit high-level operational objectives. OHI-ACC analyzes risk, classifies policies, assigns governed agents, and presents structured pre-flight plans before execution.
         </p>
       </div>
 
@@ -87,7 +87,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
             rows={3}
             value={objective}
             onChange={(e) => setObjective(e.target.value)}
-            placeholder="Describe what ACC should execute..."
+            placeholder="Describe what OHI-ACC should execute..."
             className="w-full bg-[#070b14] border border-[#1e293b] focus:border-cyan-500/70 rounded-lg p-3.5 text-xs font-mono text-slate-100 placeholder-slate-600 outline-none resize-none leading-relaxed"
           />
         </div>
@@ -113,7 +113,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
         <div className="flex items-center justify-between pt-2">
           <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
-            <span>ACC transforms intent into verified tasks and audit records.</span>
+            <span>OHI-ACC transforms intent into governed tasks, approval requests, execution traces, and verification records.</span>
           </div>
 
           <button

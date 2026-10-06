@@ -136,7 +136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
 
         <div className="pt-2 px-3 flex items-center justify-between text-[9px] font-mono text-slate-400">
-          <span>ACC™ v1.3.0</span>
+          <span>OHI-ACC™ v1.4.0</span>
           <span>ONEGODIAN, LLC</span>
         </div>
       </div>

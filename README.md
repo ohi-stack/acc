@@ -1,30 +1,35 @@
-# ACC™ — OHI Command Console + Agent Command Console
+# OHI-ACC™ — Agent Command Console
 
-ACC™ is the unified command-and-control platform for the OneGodian operational stack.
+OHI-ACC™ is the unified command-and-control platform for the OneGodian operational stack.
 
 **Canonical production domain:** `https://acc.onegodian.com`
 
-**Current platform version:** `1.3.0`
+**Current platform version:** `1.4.0`
 
-ACC unifies governed system supervision, agents, workflows, approvals, executions, verification, deployment evidence, audit, Oru’Valen™ intelligence-twin support, and OMOS™ runtime integration inside one operator interface.
+OHI-ACC unifies governed system supervision, agents, workflows, approvals, executions, verification, deployment evidence, audit, Oru’Valen™ intelligence-twin support, and OMOS™ runtime integration inside one operator interface.
 
 ## Canonical Platform Identity
 
-ACC combines two first-class control modules inside one platform:
+**Canonical product name:** `OHI-ACC™ — Agent Command Console`
+
+**Repository compatibility name:** `ACC` / `@onegodian/acc`
+
+
+OHI-ACC combines two first-class control modules inside one platform:
 
 1. **OHI Command Console** — OHI systems, governed execution, runtime status, registry visibility, identity, policy, audit, and service supervision.
 2. **Agent Command Console** — agents, tasks, queues, workflows, delegation, schedules, runtime activity, and automation operations.
 
-ACC now also exposes dedicated integration surfaces for:
+OHI-ACC now also exposes dedicated integration surfaces for:
 
 3. **Oru’Valen™** — OHI Twin decision-support, institutional memory, lived-experience memory, decision memory, current-state modeling, and provenance visibility.
 4. **OMOS™** — operating-system and reasoning integration, reference-run visibility, provider/persistence surfaces, engineering workflow, and decision records.
 
-These are not separate competing control planes. ACC remains the canonical execution-control interface.
+These are not separate competing control planes. OHI-ACC remains the canonical execution-control interface.
 
 ## Authority Model
 
-ACC does not replace human authority.
+OHI-ACC does not replace human authority.
 
 Canonical operating chain:
 
@@ -33,7 +38,7 @@ Authorized Human Judgment
         ↓
 Oru’Valen™ / OMOS™ decision support and reasoning
         ↓
-ACC™ control plane
+OHI-ACC™ control plane
         ↓
 OCP™ policy and authorization
         ↓
@@ -48,7 +53,7 @@ Oru’Valen may recommend, summarize, model, and prepare execution requests. OMO
 
 ## Core Execution Contract
 
-Every governed ACC flow follows:
+Every governed OHI-ACC flow follows:
 
 ```text
 intake → validate → execute → verify → log → output
@@ -100,7 +105,7 @@ Canonical OMOS node: `https://omos.onegodian.com`
 
 ## Architectural Position
 
-ACC is the operator interface and governed control plane. It does not replace governance authority or execution authority.
+OHI-ACC is the operator interface and governed control plane. It does not replace governance authority or execution authority.
 
 Authority and execution flow through:
 
@@ -112,7 +117,7 @@ Authority and execution flow through:
 - Verification and audit services
 - Human approval gates
 
-ACC displays, routes, supervises, and controls approved workflows through governed APIs.
+OHI-ACC displays, routes, supervises, and controls approved workflows through governed APIs.
 
 ## Engineering Council Flow
 
@@ -158,7 +163,7 @@ GitHub Issue
 
 ## Repository Family
 
-The canonical family remains:
+The canonical OHI-ACC repository family remains:
 
 - `ohi-stack/acc` — primary platform and source of truth
 - `ohi-stack/acc-core` — shared authority/control-plane contracts
@@ -166,7 +171,7 @@ The canonical family remains:
 - `ohi-stack/acc-runner` — controlled execution runtime
 - `ohi-stack/acc-web` — web interface family / compatibility surface
 
-Additional adapter/database/auth/log repositories may remain modular, but they must not redefine ACC independently from `ohi-stack/acc`.
+Additional adapter/database/auth/log repositories may remain modular, but they must not redefine OHI-ACC independently from `ohi-stack/acc`.
 
 ## Local Development
 
@@ -207,13 +212,13 @@ Future dedicated API target:
 
 - `api.acc.onegodian.com`
 
-Until that API is separated, ACC may continue consuming the existing OneGodian Node API where required by the deployed environment.
+Until that API is separated, OHI-ACC may continue consuming the existing OneGodian Node API where required by the deployed environment.
 
 `acc.qrv.network` must not be used as the primary ACC destination. QR-V remains the verification, registry, certificate, audit, and public-trust layer supporting ACC.
 
 ## Production Direction
 
-ACC must remain reusable infrastructure rather than a one-off dashboard:
+OHI-ACC must remain reusable infrastructure rather than a one-off dashboard:
 
 - configuration-driven modules
 - tenant-aware routing where required

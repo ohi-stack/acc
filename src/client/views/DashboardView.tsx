@@ -83,7 +83,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigate, onRefr
           <h1 className="text-xl font-display font-bold text-slate-100 flex items-center gap-2.5">
             Operational Dashboard
             <span className="text-xs font-mono font-normal px-2 py-0.5 rounded bg-[#141d30] text-[#d4af37] border border-[#d4af37]/30">
-              ACC™ Control Plane
+              OHI-ACC™ Control Plane
             </span>
           </h1>
           <p className="text-xs text-slate-400 font-mono mt-0.5">
