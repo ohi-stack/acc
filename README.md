@@ -223,3 +223,7 @@ ACC must remain reusable infrastructure rather than a one-off dashboard:
 - human approval for privileged actions
 - no false operational claims
 - deployment proof before a feature is represented as production-complete
+
+## OneGodian LLM Synthesis Engine™ integration
+
+This repository follows the shared model-agnostic synthesis, OIPS portability, authority, provenance, and human-approval contract documented in [`docs/LLM-SYNTHESIS-ENGINE-INTEGRATION.md`](docs/LLM-SYNTHESIS-ENGINE-INTEGRATION.md). The canonical Synthesis Engine code authority remains `ohi-stack/onegodian-llm`; this repository implements only its own integration boundary.
