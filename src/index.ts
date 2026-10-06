@@ -13,7 +13,7 @@ dotenv.config();
 async function bootstrap(): Promise<void> {
   const port = env.PORT;
 
-  logger.info({ version: env.ACC_VERSION, environment: env.NODE_ENV }, 'ACC — Agent Command Console starting');
+  logger.info({ version: env.ACC_VERSION, environment: env.NODE_ENV }, 'OHI-ACC — Agent Command Console starting');
 
   const bundlePath = path.resolve(process.cwd(), 'public/bundle.js');
   if (!fs.existsSync(bundlePath)) {
@@ -38,13 +38,13 @@ async function bootstrap(): Promise<void> {
 
   const app = createApp();
   const server = app.listen(port, '0.0.0.0', () => {
-    logger.info({ port, version: env.ACC_VERSION }, 'ACC control plane listening');
+    logger.info({ port, version: env.ACC_VERSION }, 'OHI-ACC control plane listening');
   });
 
   const shutdown = (signal: string) => {
-    logger.info({ signal }, 'Gracefully shutting down ACC');
+    logger.info({ signal }, 'Gracefully shutting down OHI-ACC');
     const forceExit = setTimeout(() => {
-      logger.error('ACC graceful shutdown timed out');
+      logger.error('OHI-ACC graceful shutdown timed out');
       process.exit(1);
     }, 10000);
     forceExit.unref();
