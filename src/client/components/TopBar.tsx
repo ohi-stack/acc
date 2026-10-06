@@ -37,7 +37,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
   return (
     <header className="h-14 bg-[#070b14] border-b border-[#1e293b] flex items-center justify-between px-4 z-20 shrink-0 select-none">
-      {/* Left: ACC™ Brand Logo */}
+      {/* Left: OHI-ACC™ Brand Logo */}
       <div className="flex items-center gap-3">
         <div 
           onClick={() => onNavigate('/console/dashboard')}
@@ -45,13 +45,13 @@ export const TopBar: React.FC<TopBarProps> = ({
         >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#d4af37] to-[#997a15] p-0.5 shadow-md flex items-center justify-center">
             <div className="w-full h-full bg-[#070b14] rounded-[6px] flex items-center justify-center">
-              <span className="font-display font-black text-xs tracking-wider text-[#d4af37]">ACC</span>
+              <span className="font-display font-black text-xs tracking-wider text-[#d4af37]">OHI</span>
             </div>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="font-display font-bold tracking-wider text-sm text-slate-100 group-hover:text-[#d4af37] transition-colors">
-                ACC™
+                OHI-ACC™
               </span>
               <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-[#1e293b] text-[#d4af37] font-semibold border border-[#d4af37]/20">
                 ONEGODIAN
