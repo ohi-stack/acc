@@ -7,7 +7,7 @@ const child = spawn(process.execPath, ['dist/index.js'], {
     ...process.env,
     NODE_ENV: 'test',
     PORT: String(port),
-    ACC_VERSION: '1.2.0',
+    ACC_VERSION: '1.4.0',
     POSTGRES_URL: 'postgres://postgres:postgres@127.0.0.1:5432/acc-smoke',
     DATABASE_SSL: 'false',
     ALLOW_CORS_ORIGIN: 'http://127.0.0.1',
@@ -38,14 +38,14 @@ async function waitFor(path, expectedStatus = 200) {
 
 try {
   const health = await waitFor('/health');
-  if (health.service !== 'ACC' || health.version !== '1.2.0') throw new Error('health identity/version mismatch');
+  if (health.service !== 'OHI-ACC' || health.version !== '1.4.0') throw new Error('health identity/version mismatch');
 
   const ready = await waitFor('/ready');
   if (ready.status !== 'ready') throw new Error(`runtime not ready: ${JSON.stringify(ready)}`);
 
   console.log(JSON.stringify({
     status: 'PASS',
-    service: 'ACC',
+    service: 'OHI-ACC',
     version: health.version,
     liveness: health.status,
     readiness: ready.status,
@@ -53,7 +53,7 @@ try {
   }, null, 2));
 } catch (error) {
   console.error(output);
-  console.error(`ACC smoke FAILED: ${error.message}`);
+  console.error(`OHI-ACC smoke FAILED: ${error.message}`);
   process.exitCode = 1;
 } finally {
   child.kill('SIGTERM');
