@@ -8,16 +8,16 @@ export const DocsView: React.FC = () => {
       <div className="pb-3 border-b border-[#1e293b]">
         <h1 className="text-xl font-display font-bold text-slate-100 flex items-center gap-2.5">
           <BookOpen className="w-5 h-5 text-cyan-400" />
-          ACC™ Architecture & Invariants Documentation
+          OHI-ACC™ Architecture & Invariants Documentation
         </h1>
-        <p className="text-slate-400 text-xs mt-1">Operational guidelines for ONEGODIAN, LLC Agent Command Console</p>
+        <p className="text-slate-400 text-xs mt-1">Operational guidelines for ONEGODIAN, LLC OHI-ACC™ — Agent Command Console</p>
       </div>
 
       <div className="space-y-4">
         <div className="bg-[#0d1322] border border-[#1e293b] rounded-xl p-4 space-y-2">
           <div className="text-sm font-bold text-slate-100">1. Core Execution Separation</div>
           <p className="text-slate-400 leading-relaxed">
-            Human / Trusted System → ACC → Agent / Model → Verification → Commit / Release
+            Human / Trusted System → OHI-ACC → OCP → OEG → Agent / Model / Tool → Verification → Commit / Release
           </p>
         </div>
 
