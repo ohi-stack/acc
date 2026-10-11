@@ -6,16 +6,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build:client": "esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify",
+    "build:client": "npm run build:bundle && tsc && npm run build:schema",
     "build:schema": "node scripts/copy-schema.mjs",
-    "build": "npm run build:client && tsc && npm run build:schema",
+    "build": "npm run build:client",
     "check": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "start": "node dist/index.js",
     "preflight:production": "node scripts/preflight-production.mjs",
     "test:smoke": "node scripts/smoke-runtime.mjs",
     "test:auth": "node scripts/auth-contract.mjs",
-    "test": "npm run check && npm run build && npm run test:smoke && npm run test:auth"
+    "test": "npm run check && npm run build && npm run test:smoke && npm run test:auth",
+    "build:bundle": "esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
