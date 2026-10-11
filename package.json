@@ -16,7 +16,8 @@
     "test:smoke": "node scripts/smoke-runtime.mjs",
     "test:auth": "node scripts/auth-contract.mjs",
     "test": "npm run check && npm run build && npm run test:smoke && npm run test:auth",
-    "build:bundle": "esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify"
+    "build:bundle": "esbuild src/client/index.tsx --bundle --outfile=public/bundle.js --format=esm --jsx=automatic --minify",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
