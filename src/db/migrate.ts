@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { getDatabase } from './postgres';
 import { logger } from '../utils/logger';
+import { ALL_CANONICAL_AGENTS } from '../core/canonical-registry';
 
 export async function runMigrations(): Promise<void> {
   const db = await getDatabase();
@@ -42,82 +43,48 @@ async function seedInitialData(db: any): Promise<void> {
     ON CONFLICT (id) DO NOTHING;
   `);
 
-  // Seed Default ACC Agents
-  await db.query(`
-    INSERT INTO agents (id, name, type, version, status, capabilities, supported_task_types, environment, max_concurrency, queue_affinity, authority_role, model_adapter)
-    VALUES
-      (
-        'agent-sec-guard-01',
-        'Security & Policy Sentinel',
-        'PolicyEnforcer',
-        '1.2.0',
-        'READY',
-        '["policy_verification", "vulnerability_scan", "secret_detection"]'::jsonb,
-        '["security_audit", "pr_security_scan", "policy_eval"]'::jsonb,
-        'production',
-        4,
-        'acc-tasks',
-        'agent_executor',
-        'gemini-3.8-flash'
-      ),
-      (
-        'agent-eng-pr-01',
-        'Engineering Council Reviewer',
-        'CouncilReviewer',
-        '2.0.1',
-        'READY',
-        '["ast_diff_review", "test_coverage_eval", "architecture_compliance"]'::jsonb,
-        '["code_review", "pr_assessment", "refactor_plan"]'::jsonb,
-        'production',
-        2,
-        'acc-tasks',
-        'agent_executor',
-        'gemini-3.1-pro-preview'
-      ),
-      (
-        'agent-ci-verifier-01',
-        'Build & Verification Agent',
-        'CIAutomation',
-        '1.0.4',
-        'READY',
-        '["type_compilation", "smoke_test", "evidence_generation"]'::jsonb,
-        '["ci_build", "smoke_test", "container_check"]'::jsonb,
-        'production',
-        3,
-        'acc-tasks',
-        'agent_executor',
-        'gemini-3.8-flash'
-      ),
-      (
-        'agent-omos-auditor-01',
-        'OMOS Operational Integrity Agent',
-        'OperatingModelAuditor',
-        '1.1.0',
-        'READY',
-        '["governance_hash_check", "audit_provenance_verification"]'::jsonb,
-        '["omos_audit", "compliance_attestation"]'::jsonb,
-        'production',
-        2,
-        'acc-tasks',
-        'agent_executor',
-        'gemini-3.8-flash'
-      ),
-      (
-        'agent-exec-gateway-01',
-        'General Task Orchestrator',
-        'TaskOrchestrator',
-        '1.5.0',
-        'READY',
-        '["task_decomposition", "model_dispatch", "result_synthesis"]'::jsonb,
-        '["objective_plan", "task_execution", "general_command"]'::jsonb,
-        'production',
-        5,
-        'acc-tasks',
-        'agent_executor',
-        'gemini-3.8-flash'
+  // Seed Canonical ACC Registry (52 Agents: Class A, Class B, Class C)
+  for (const ag of ALL_CANONICAL_AGENTS) {
+    await db.query(`
+      INSERT INTO agents (
+        id, name, type, classification, division, source_timestamp, source_record,
+        registry_state, operational_state, version, status, capabilities,
+        supported_task_types, environment, max_concurrency, queue_affinity,
+        authority_role, model_adapter
       )
-    ON CONFLICT (id) DO NOTHING;
-  `);
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb, $13::jsonb, $14, $15, $16, $17, $18)
+      ON CONFLICT (id) DO UPDATE SET
+        name = EXCLUDED.name,
+        type = EXCLUDED.type,
+        classification = EXCLUDED.classification,
+        division = EXCLUDED.division,
+        source_timestamp = EXCLUDED.source_timestamp,
+        source_record = EXCLUDED.source_record,
+        registry_state = EXCLUDED.registry_state,
+        operational_state = EXCLUDED.operational_state,
+        capabilities = EXCLUDED.capabilities,
+        supported_task_types = EXCLUDED.supported_task_types;
+    `, [
+      ag.id,
+      ag.name,
+      ag.type,
+      ag.classification,
+      ag.division,
+      ag.sourceTimestamp || null,
+      ag.sourceRecord,
+      ag.registryState,
+      ag.operationalState,
+      ag.version,
+      ag.status,
+      JSON.stringify(ag.capabilities),
+      JSON.stringify(ag.supportedTaskTypes),
+      ag.environment,
+      ag.maxConcurrency,
+      ag.queueAffinity,
+      ag.authorityRole,
+      ag.modelAdapter
+    ]);
+  }
 
   // Seed Providers
   await db.query(`

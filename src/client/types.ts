@@ -4,6 +4,13 @@ export interface Agent {
   id: string;
   name: string;
   type: string;
+  classification?: string;
+  division?: string;
+  source_timestamp?: string;
+  source_record?: string;
+  registry_state?: string;
+  operational_state?: string;
+  description?: string;
   version: string;
   status: 'DRAFT' | 'READY' | 'AUTHORIZED' | 'EXECUTING' | 'COMPLETED' | 'FAILED' | 'TERMINATED' | 'ESCALATED';
   capabilities: string[];
@@ -18,6 +25,15 @@ export interface Agent {
   last_heartbeat: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface SovereignApplicationModule {
+  id: string;
+  name: string;
+  category: string;
+  historicalDate: string;
+  description: string;
+  status: 'Application Concept' | 'Prototype Module';
 }
 
 export interface Task {

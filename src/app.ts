@@ -13,7 +13,8 @@ export function createApp() {
 
   app.use(helmet({
     contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy: false,
+    frameguard: false
   }));
 
   app.use(express.json({ limit: '10mb' }));
@@ -61,7 +62,12 @@ export function createApp() {
 
   const spaRoutes = [
     '/',
+    '/console',
     '/console/*',
+    '/oruvalen',
+    '/oruvalen/*',
+    '/omos',
+    '/omos/*',
     '/agents',
     '/agents/*',
     '/tasks',
@@ -103,6 +109,7 @@ export function createApp() {
   spaRoutes.forEach(route => {
     app.get(route, serveIndex);
   });
+  app.get('*', serveIndex);
 
   app.use(errorHandler);
   return app;

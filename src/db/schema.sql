@@ -16,6 +16,12 @@ CREATE TABLE IF NOT EXISTS agents (
   id VARCHAR(64) PRIMARY KEY,
   name VARCHAR(128) NOT NULL,
   type VARCHAR(64) NOT NULL,
+  classification VARCHAR(64), -- Class A (Dystopian Prevention), Class B (Named Operational), Class C (Knowledge Agent)
+  division VARCHAR(64),
+  source_timestamp VARCHAR(64),
+  source_record VARCHAR(128),
+  registry_state VARCHAR(32) DEFAULT 'Registered',
+  operational_state VARCHAR(32) DEFAULT 'Production',
   version VARCHAR(32) NOT NULL DEFAULT '1.0.0',
   status VARCHAR(32) NOT NULL DEFAULT 'READY', -- DRAFT, READY, AUTHORIZED, EXECUTING, COMPLETED, FAILED, TERMINATED, ESCALATED
   capabilities JSONB NOT NULL DEFAULT '[]',

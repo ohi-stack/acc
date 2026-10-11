@@ -16,6 +16,37 @@ let dbInstance: DatabaseClient | null = null;
 export async function getDatabase(): Promise<DatabaseClient> {
   if (dbInstance) return dbInstance;
 
+  // Prioritize Cloud SQL if environment variables are present (Object Method)
+  if (process.env.SQL_HOST && process.env.SQL_USER && process.env.SQL_DB_NAME) {
+    try {
+      logger.info('Connecting to Cloud SQL instance via Auth Proxy (Object Method)');
+      const pool = new Pool({
+        host: process.env.SQL_HOST,
+        user: process.env.SQL_USER,
+        password: process.env.SQL_PASSWORD,
+        database: process.env.SQL_DB_NAME,
+        max: Number(process.env.ACC_DB_POOL_MAX || 10),
+        connectionTimeoutMillis: 15000,
+        idleTimeoutMillis: 30000
+      });
+      pool.on('error', (err) => {
+        logger.error({ err }, 'Unexpected error on idle Cloud SQL pool client');
+      });
+      const cloudSqlClient: DatabaseClient = {
+        query: async <T = any>(sql: string, params: any[] = []): Promise<{ rows: T[] }> => {
+          const res = await pool.query(sql, params);
+          return { rows: res.rows as T[] };
+        },
+        close: async () => pool.end(),
+        isRemote: () => true
+      };
+      dbInstance = cloudSqlClient;
+      return cloudSqlClient;
+    } catch (err) {
+      logger.warn({ err }, 'Cloud SQL pool initialization failed; falling back to alternative');
+    }
+  }
+
   const isExternalPg = Boolean(env.POSTGRES_URL) &&
     !env.POSTGRES_URL.includes('localhost') &&
     !env.POSTGRES_URL.includes('127.0.0.1');

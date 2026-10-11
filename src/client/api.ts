@@ -1,7 +1,12 @@
-import { Agent, Task, Execution, ApprovalRequest, Workflow, ProviderItem, ConnectionItem, DeploymentItem, VerificationItem, AuditRecordItem } from './types';
+import { Agent, Task, Execution, ApprovalRequest, Workflow, ProviderItem, ConnectionItem, DeploymentItem, VerificationItem, AuditRecordItem, SovereignApplicationModule } from './types';
 
 let currentActor = 'onegodian_admin';
 let currentRole = 'super_admin';
+let currentAuthToken: string | null = null;
+
+export function setAuthToken(token: string | null) {
+  currentAuthToken = token;
+}
 
 export function setOperator(actor: string, role: string) {
   currentActor = actor;
@@ -17,6 +22,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   headers.set('Content-Type', 'application/json');
   headers.set('x-acc-actor', currentActor);
   headers.set('x-acc-role', currentRole);
+  if (currentAuthToken) {
+    headers.set('Authorization', `Bearer ${currentAuthToken}`);
+  }
 
   const res = await fetch(path, {
     ...options,
@@ -38,7 +46,12 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 export const api = {
   // Agents
-  getAgents: () => request<Agent[]>('/api/v1/agents'),
+  getAgents: (classification?: string) => {
+    const q = classification ? `?classification=${encodeURIComponent(classification)}` : '';
+    return request<Agent[]>(`/api/v1/agents${q}`);
+  },
+  getSamCatalog: () => request<SovereignApplicationModule[]>('/api/v1/sam-catalog'),
+  reconcileBaseline: () => request<{ success: boolean; reconciled: number; totalAgents: number }>('/api/v1/agents/reconcile-baseline', { method: 'POST' }),
   getAgent: (id: string) => request<Agent & { recentExecutions: Execution[]; auditHistory: AuditRecordItem[] }>(`/api/v1/agents/${id}`),
   registerAgent: (payload: Partial<Agent>) => request<Agent>('/api/v1/agents', { method: 'POST', body: JSON.stringify(payload) }),
   setAgentStatus: (id: string, status: string) => request<Agent>(`/api/v1/agents/${id}/status`, { method: 'POST', body: JSON.stringify({ status }) }),

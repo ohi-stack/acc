@@ -11,6 +11,7 @@ import { healthService } from '../services/HealthService';
 import { councilService } from '../services/CouncilService';
 import { providerRegistry } from '../providers/registry';
 import { logger } from '../utils/logger';
+import { ALL_CANONICAL_AGENTS, SOVEREIGN_APPLICATION_MODULES } from '../core/canonical-registry';
 
 export const v1Router = Router();
 
@@ -26,10 +27,81 @@ v1Router.use((req: Request, _res: Response, next: NextFunction) => {
    1. AGENTS API (/api/v1/agents)
    ========================================================================= */
 
-v1Router.get('/agents', async (_req, res, next) => {
+v1Router.get('/agents', async (req, res, next) => {
   try {
-    const agentsRes = await pgPool.query(`SELECT * FROM agents ORDER BY created_at DESC`);
+    const classification = req.query.classification as string;
+    let query = `SELECT * FROM agents`;
+    const params: any[] = [];
+    if (classification) {
+      query += ` WHERE classification = $1`;
+      params.push(classification);
+    }
+    query += ` ORDER BY CASE 
+      WHEN classification = 'Class A — Historical Dystopian Prevention' THEN 1
+      WHEN classification = 'Class B — Named Operational' THEN 2
+      WHEN classification = 'Class C — Role-Based Knowledge' THEN 3
+      ELSE 4 END, id ASC`;
+    const agentsRes = await pgPool.query(query, params);
     res.json({ success: true, count: agentsRes.rows.length, data: agentsRes.rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+v1Router.get('/sam-catalog', async (_req, res) => {
+  res.json({
+    success: true,
+    count: SOVEREIGN_APPLICATION_MODULES.length,
+    data: SOVEREIGN_APPLICATION_MODULES,
+    notice: 'Sovereign Application Modules are historical virtual tool concepts, cataloged separately from numbered canonical registry agents.'
+  });
+});
+
+v1Router.post('/agents/reconcile-baseline', async (_req, res, next) => {
+  try {
+    for (const ag of ALL_CANONICAL_AGENTS) {
+      await pgPool.query(`
+        INSERT INTO agents (
+          id, name, type, classification, division, source_timestamp, source_record,
+          registry_state, operational_state, version, status, capabilities,
+          supported_task_types, environment, max_concurrency, queue_affinity,
+          authority_role, model_adapter
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb, $13::jsonb, $14, $15, $16, $17, $18)
+        ON CONFLICT (id) DO UPDATE SET
+          name = EXCLUDED.name,
+          type = EXCLUDED.type,
+          classification = EXCLUDED.classification,
+          division = EXCLUDED.division,
+          source_timestamp = EXCLUDED.source_timestamp,
+          source_record = EXCLUDED.source_record,
+          registry_state = EXCLUDED.registry_state,
+          operational_state = EXCLUDED.operational_state,
+          capabilities = EXCLUDED.capabilities,
+          supported_task_types = EXCLUDED.supported_task_types;
+      `, [
+        ag.id,
+        ag.name,
+        ag.type,
+        ag.classification,
+        ag.division,
+        ag.sourceTimestamp || null,
+        ag.sourceRecord,
+        ag.registryState,
+        ag.operationalState,
+        ag.version,
+        ag.status,
+        JSON.stringify(ag.capabilities),
+        JSON.stringify(ag.supportedTaskTypes),
+        ag.environment,
+        ag.maxConcurrency,
+        ag.queueAffinity,
+        ag.authorityRole,
+        ag.modelAdapter
+      ]);
+    }
+    const countRes = await pgPool.query(`SELECT COUNT(*) as total FROM agents`);
+    res.json({ success: true, reconciled: ALL_CANONICAL_AGENTS.length, totalAgents: Number(countRes.rows[0].total) });
   } catch (err) {
     next(err);
   }

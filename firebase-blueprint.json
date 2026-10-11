@@ -1,0 +1,152 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authorized ACC operator and user profile record",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128,
+          "description": "Firebase Auth UID"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "User display name"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["super_admin", "acc_operator", "auditor", "viewer"],
+          "description": "Authorized ACC role"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Designated administrator document for zero-trust RBAC exists checks",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128,
+          "description": "Admin UID matching auth.uid"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Admin email address"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["super_admin"],
+          "description": "Super admin authority"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "AuditRecord": {
+      "title": "AuditRecord",
+      "description": "Immutable governance execution and decision audit trail entry",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128,
+          "description": "Audit record identifier"
+        },
+        "actorId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Executing actor identifier"
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Action performed"
+        },
+        "authorityScope": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Authority scope invoked"
+        },
+        "riskLevel": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+          "description": "Risk assessment level"
+        },
+        "decision": {
+          "type": "string",
+          "enum": ["ALLOW", "DENY", "REQUIRE_HUMAN_APPROVAL"],
+          "description": "Governance decision"
+        },
+        "approvalStatus": {
+          "type": "string",
+          "enum": ["APPROVED", "REJECTED", "PENDING", "SYSTEM_EXECUTED"],
+          "description": "Approval status"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp"
+        }
+      },
+      "required": ["id", "actorId", "action", "riskLevel", "decision"]
+    },
+    "TestConnection": {
+      "title": "TestConnection",
+      "description": "Heartbeat document for SDK connection verification",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Connection test status string"
+        }
+      },
+      "required": ["status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual operator user profiles"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Root admin directory used for trusted RBAC role verification"
+    },
+    "/audit_records/{recordId}": {
+      "schema": "AuditRecord",
+      "description": "Governance and execution audit log"
+    },
+    "/test/{docId}": {
+      "schema": "TestConnection",
+      "description": "SDK connection test collection"
+    }
+  }
+}
