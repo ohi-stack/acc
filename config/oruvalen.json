@@ -1,0 +1,31 @@
+{
+  "id": "oruvalen",
+  "name": "Oru’Valen™",
+  "classification": "OHI Twin / Operational Intelligence",
+  "canonicalNode": "https://acc.onegodian.com/oruvalen",
+  "omosNode": "https://omos.onegodian.com",
+  "omosArchitecture": "https://omos.onegodian.com/oru/",
+  "controlPlane": "ACC",
+  "agentRegistryMember": false,
+  "humanAuthorityFinal": true,
+  "navigation": [
+    "Twin Dashboard",
+    "Context & Memory",
+    "OMOS Decisions",
+    "Approvals",
+    "Authorized Executions",
+    "Outcomes & Learning",
+    "Connections",
+    "Audit",
+    "System Health"
+  ],
+  "connectionStates": ["Connected", "Degraded", "Disconnected", "Not Configured"],
+  "capabilities": {
+    "omosDecisionRecordInput": true,
+    "oruContextHashBinding": true,
+    "humanApprovalRequired": true,
+    "liveAccExecutionBridge": false,
+    "outcomeIngestion": false,
+    "closedLearningLoop": false
+  }
+}
