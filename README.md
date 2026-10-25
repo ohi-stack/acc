@@ -232,3 +232,12 @@ OHI-ACC must remain reusable infrastructure rather than a one-off dashboard:
 ## OneGodian LLM Synthesis Engine™ integration
 
 This repository follows the shared model-agnostic synthesis, OIPS portability, authority, provenance, and human-approval contract documented in [`docs/LLM-SYNTHESIS-ENGINE-INTEGRATION.md`](docs/LLM-SYNTHESIS-ENGINE-INTEGRATION.md). The canonical Synthesis Engine code authority remains `ohi-stack/onegodian-llm`; this repository implements only its own integration boundary.
+
+## QuantumOHI and ACC Repository Alignment — October 2026
+
+- **Unified OHI + Agent Command Console:** `ohi-stack/acc`, canonical operator URL `https://acc.onegodian.com`
+- **Companion frontend module:** `ohi-stack/acc-web`; this must follow the primary ACC shell and must not become a competing deployment.
+- **Governance/policy dependency:** `ohi-stack/ohi-control-plane`; decisions remain server-side and approval-gated.
+- **Public platform:** `ohi-stack/quantumohi-platform`, `https://quantumohi.com`; it may link authorized users to ACC, but must not embed privileged operator controls in its public UI.
+
+Integration follows `intake → validate → execute → verify → log → output`, with an explicit OCP authorization gate before privileged execution. Use versioned service contracts and tenant-scoped configuration. This repository alignment is not proof of live connectivity or deployment.
